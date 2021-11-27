@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.KhachHang;
 import model.TaiKhoan;
+import model.User;
 import service.ICustomerService;
 import utils.HttpUtil;
 
@@ -68,7 +69,7 @@ public class CustomerAPI extends HttpServlet{
             ex.printStackTrace();
         }
         String soDT = obj.getJsonString("soDT").getString();
-        String maCN = obj.getJsonString("maCN").getString();
+        String maCN =((User) req.getSession().getAttribute("user")).getMaCN();
         BigDecimal soDu = new BigDecimal(obj.getJsonString("soDu").getString());
         
         String messageAfterInsert = customerService.insertCustomer(cmnd, ho, ten, diaChi,

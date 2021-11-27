@@ -8,7 +8,7 @@ package model;
 import java.sql.Timestamp;
 
 public class KhachHang{
-    private String CMND;
+    private String cmnd;
     private String ho;
     private String ten;
     private String diaChi;
@@ -18,7 +18,7 @@ public class KhachHang{
     private String maCN;
 
     public String getCMND() {
-        return CMND;
+        return cmnd;
     }
 
     public String getHo() {
@@ -49,8 +49,8 @@ public class KhachHang{
         return maCN;
     }
 
-    public void setCMND(String CMND) {
-        this.CMND = CMND;
+    public void setCMND(String cmnd) {
+        this.cmnd = cmnd;
     }
 
     public void setHo(String ho) {

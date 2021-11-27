@@ -63,7 +63,24 @@ const router = async () => {
         }
     }
     else if (view instanceof Employee){
-        view.setEventBtn();
+        view.setEventBtn(function(){
+            navigateTo("/employee");
+        });
+    }
+    else if (view instanceof Customer){
+        view.setEventBtn(function(){
+            navigateTo("/customer");
+        });
+    }
+    else if (view instanceof Money_Tranfer){
+        view.setEventBtn(function(){
+            navigateTo("/money-transfer");
+        });
+    }
+    else if (view instanceof Deposit_Withdraw){
+        view.setEventBtn(function(){
+            navigateTo("/deposit-withdraw");
+        });
     }
     else{
         document.querySelector("#app").innerHTML = view.getHtml();
