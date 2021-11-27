@@ -19,7 +19,7 @@ public class MoneyTransferDAO extends AbstractDAO<GD_ChuyenTien> implements IMon
 
     @Override
     public List<GD_ChuyenTien> getAll() {
-        return query("select * from GD_GoiRut", new MoneyTransferMapper());
+        return query("select * from GD_CHUYENTIEN", new MoneyTransferMapper());
     }
 
     @Override
