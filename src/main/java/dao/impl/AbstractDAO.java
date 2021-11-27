@@ -17,6 +17,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mapper.RowMapper;
 
 /**
@@ -102,16 +104,16 @@ public class AbstractDAO<T> implements GenericDAO<T>{
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
             setParameter(statement, parameters);
-            statement.executeUpdate();
+            statement.executeQuery();
             connection.commit();
         } catch (SQLException e) {
             if (connection!=null){
-                try {
-                    connection.rollback();
-                } catch (SQLException e1) {
-                    e1.printStackTrace();
+                    try {
+                        connection.rollback();
+                    } catch (SQLException e1) {
+                        e1.printStackTrace();
+                    }
                 }
-            }
             return e.getMessage();
         }
         finally {

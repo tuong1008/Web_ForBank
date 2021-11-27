@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.GD_ChuyenTien;
+import model.User;
 import service.IMoneyTransferService;
 import utils.HttpUtil;
 
@@ -43,6 +44,7 @@ public class MoneyTransferAPI extends HttpServlet{
         req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		GD_ChuyenTien trans =  HttpUtil.of(req.getReader()).toModel(GD_ChuyenTien.class);
+                trans.setMaNV(((User) req.getSession().getAttribute("user")).getUserName());
         String messageAfterInsert = moneyTransferService.insertMoneyTransfer(trans);
 		JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
         if (messageAfterInsert==null){

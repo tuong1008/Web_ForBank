@@ -6,15 +6,94 @@ export default class extends AbstractView {
         this.setTitle("MoneyTransfer");
     }
 
+    setEventBtn(callback){
+        document.getElementById("addBtn").addEventListener("click", function(event) {
+            event.preventDefault();
+            document.querySelector("#app").innerHTML =`
+            <h2 id="errorMsg"></h2>
+            <form id="formSignUp" name="formSignUp">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="soTK_Chuyen" name="soTK_Chuyen"
+                        placeholder="Tài Khoản Chuyển">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="soTien" name="soTien"
+                        placeholder="Số Tiền">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="soTK_Nhan" name="soTK_Nhan"
+                        placeholder="Tài Khoản Nhận">
+                </div>
+                <button id="signUpBtn" class="btn btn-primary">Xác Nhận</button>
+            </form>`;
+            document.getElementById("signUpBtn").addEventListener("click", function(event){
+                let formSignUp = document.getElementById('formSignUp');
+                let formData = new FormData(formSignUp);
+                var object = {};
+                formData.forEach(function(value, key){
+                    object[key] = value;
+                });
+                console.log(object);
+                let url = "http://localhost:8080/Web_ForBank/api-money-tranfer";
+                fetch(url, {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(object)
+                })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(success => {
+                        console.log(success);
+                        callback();
+                    })
+                    .catch(err => {
+                        //login fail, show message error that return by json
+                        document.getElementById("errorMsg").innerHTML =  err;
+                    });
+                event.preventDefault();
+            });
+        });
+    }
+
+    load() {
+        let url = "http://localhost:8080/Web_ForBank/api-money-tranfer";
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (trans) {
+                console.log(trans);
+                let x = document.getElementById("tblTran");
+                for (let tran of trans) {
+                    let row = document.createElement("TR");
+                    row.innerHTML = `
+                    <td>${tran.maGD}</td>
+                    <td>${tran.soTK_Chuyen}</td>
+                    <td>${tran.ngayGD}</td>
+                    <td>${tran.soTien}</td>
+                    <td>${tran.soTK_Nhan}</td>
+                    <td>${tran.maNV}</td>
+                    `
+                    x.appendChild(row);
+                }
+            });
+    };
+
     getHtml() {
         return `
-            <h1>Welcome back, Dom</h1>
-            <p>
-                MoneyTransfer
-            </p>
-            <p>
-                <a href="/posts" data-link>View recent posts</a>.
-            </p>
+        <button id="addBtn" class="btn btn-primary">Chuyển Tiền</button>
+        <table id="tblTran">
+        <tr>
+          <th>Mã Giao Dịch</th>
+          <th>Tài Khoản Chuyển</th>
+          <th>Ngày Giao Dịch</th>
+          <th>Số Tiền</th>
+          <th>Tài Khoản Nhận</th>
+          <th>Mã Nhân Viên</th>
+        </tr>
+      </table>
         `;
     }
 }

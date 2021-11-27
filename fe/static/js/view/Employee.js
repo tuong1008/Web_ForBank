@@ -6,7 +6,7 @@ export default class extends AbstractView {
         this.setTitle("Employee");
     }
 
-    setEventBtn(){
+    setEventBtn(callback){
         document.getElementById("addBtn").addEventListener("click", function(event) {
             event.preventDefault();
             document.querySelector("#app").innerHTML =`
@@ -66,6 +66,7 @@ export default class extends AbstractView {
                     })
                     .then(success => {
                         console.log(success);
+                        callback();
                     })
                     .catch(err => {
                         //login fail, show message error that return by json

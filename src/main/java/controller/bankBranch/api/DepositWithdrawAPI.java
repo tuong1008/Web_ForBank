@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.GD_GoiRut;
+import model.User;
 
 import service.IDepositWithdrawService;
 import utils.HttpUtil;
@@ -44,6 +45,7 @@ public class DepositWithdrawAPI extends HttpServlet{
         req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		GD_GoiRut trans =  HttpUtil.of(req.getReader()).toModel(GD_GoiRut.class);
+                trans.setMaNV(((User) req.getSession().getAttribute("user")).getUserName());
                 String messageAfterInsert = depositWithdrawService.insertDepositWithdraw(trans);
 		JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
         if (messageAfterInsert==null){

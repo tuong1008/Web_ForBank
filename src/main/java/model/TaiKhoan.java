@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 public class TaiKhoan{
     private String soTK;
-    private String CMND;
+    private String cmnd;
     private BigDecimal soDu;
     private String maCN;
     private Timestamp ngayMoTK;
@@ -20,7 +20,7 @@ public class TaiKhoan{
     }
 
     public String getCMND() {
-        return CMND;
+        return cmnd;
     }
 
     public BigDecimal getSoDu() {
@@ -39,8 +39,8 @@ public class TaiKhoan{
         this.soTK = soTK;
     }
 
-    public void setCMND(String CMND) {
-        this.CMND = CMND;
+    public void setCMND(String cmnd) {
+        this.cmnd = cmnd;
     }
 
     public void setSoDu(BigDecimal soDu) {
