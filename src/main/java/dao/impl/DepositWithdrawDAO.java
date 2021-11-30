@@ -25,7 +25,7 @@ public class DepositWithdrawDAO extends AbstractDAO<GD_GoiRut> implements IDepos
 
     @Override
     public String insertDepositWithdraw(String soTK, String loaiGD, BigDecimal soTien, String maNV) {
-        return crudAction("exec SP_INSERT_GD_GoiRut ?, ?, ?, ?",
+        return crudAction(true,"exec SP_INSERT_GD_GoiRut ?, ?, ?, ?",
                 soTK, loaiGD, soTien, maNV);
     }
     

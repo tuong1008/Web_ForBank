@@ -31,5 +31,20 @@ public class CustomerService implements ICustomerService{
     public String insertCustomer(String CMND, String ho, String ten, String diaChi, String phai, Timestamp ngayCap, String soDT, String maCN, BigDecimal soDu) {
         return customerDAO.insertCustomer(CMND, ho, ten, diaChi, phai, ngayCap, soDT, maCN, soDu);
     }
+
+    @Override
+    public String updateCustomer(String CMND, String ho, String ten, String diaChi, String phai, Timestamp ngayCap, String soDT) {
+        return customerDAO.updateCustomer(CMND, ho, ten, diaChi, phai, ngayCap, soDT);
+    }
+
+    @Override
+    public String deleteCustomer(String CMND) {
+        return customerDAO.deleteCustomer(CMND);
+    }
+
+    @Override
+    public KhachHang getOne(String cmnd) {
+        return customerDAO.getOne(cmnd);
+    }
     
 }

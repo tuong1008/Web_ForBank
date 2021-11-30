@@ -36,10 +36,6 @@ export default class extends AbstractView {
                 </div>
                 
                 <div class="form-group">
-                    <input type="text" class="form-control" id="lgName" name="lgName"
-                        placeholder="User Login">
-                </div>
-                <div class="form-group">
                     <input type="password" class="form-control" id="pass" name="pass"
                         placeholder="Password">
                 </div>
@@ -64,17 +60,50 @@ export default class extends AbstractView {
                     .then(function (response) {
                         return response.json();
                     })
-                    .then(success => {
-                        console.log(success);
-                        callback();
+                    .then(result => {
+                        console.log(result);
+                        if ((result.message).includes("thành công")){
+                            callback();
+                        }
+                        else{
+                            document.getElementById("errorMsg").innerHTML =  result.message;
+                        }
                     })
                     .catch(err => {
-                        //login fail, show message error that return by json
-                        document.getElementById("errorMsg").innerHTML =  "Sai tài khoản hoặc mật khẩu!";
+                        console.log(err);
                     });
                 event.preventDefault();
             });
         });
+    }
+
+    setDeleteEvent(callback){
+        if (confirm("Are you sure DELETE!")) {
+            let maNV = this.params.id;
+            let object = {'maNV': maNV};
+            let url = "http://localhost:8080/Web_ForBank/api-employee";
+            fetch(url, {
+                method: "DELETE",
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(object)
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(result => {
+                    console.log(result);
+                    if ((result.message).includes("thành công")){
+                        callback();
+                    }
+                    else{
+                        document.getElementById("errorMsg").innerHTML =  result.message;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
     }
 
     load() {
@@ -95,7 +124,11 @@ export default class extends AbstractView {
                     <td>${employee.diaChi}</td>
                     <td>${employee.phai}</td>
                     <td>${employee.soDT}</td>
-                    <td>${employee.trangThaiXoa}</td>`
+                    <td>${employee.trangThaiXoa}</td>
+                    <td>
+                    <a href="/employeeUpdate/${employee.maNV}" data-link>U</a>
+                    <a href="/employeeDelete/${employee.maNV}" data-link>D</a></td>
+                    `;
                     x.appendChild(row);
                 }
             });
@@ -106,13 +139,14 @@ export default class extends AbstractView {
         <button id="addBtn" class="btn btn-primary">Thêm Nhân Viên</button>
         <table id="tblEmployee">
         <tr>
-          <th>Mã Nhân Viên</th>
-          <th>Họ</th>
-          <th>Tên</th>
-          <th>Địa chỉ</th>
-          <th>Phái</th>
-          <th>Số Điện Thoại</th>
-          <th>Trạng Thái</th>
+            <th>Mã Nhân Viên</th>
+            <th>Họ</th>
+            <th>Tên</th>
+            <th>Địa chỉ</th>
+            <th>Phái</th>
+            <th>Số Điện Thoại</th>
+            <th>Trạng Thái</th>
+            <th>Thao tác</th>
         </tr>
       </table>
         `;

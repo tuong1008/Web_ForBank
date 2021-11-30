@@ -40,8 +40,15 @@ public class EmployeeAPI extends HttpServlet{
 		ObjectMapper mapper = new ObjectMapper();
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
-		List<NhanVien> employeeModel = employeeService.getAll();
-		mapper.writeValue(response.getOutputStream(), employeeModel);
+                String maNV = request.getParameter("maNV");
+                if (maNV!=null){
+                    NhanVien employeeModel = employeeService.getOne(maNV);
+                    mapper.writeValue(response.getOutputStream(), employeeModel);
+                }
+                else{
+                    List<NhanVien> employeeModels = employeeService.getAll();
+                    mapper.writeValue(response.getOutputStream(), employeeModels);
+                }
 	}
 
     @Override
@@ -60,12 +67,11 @@ public class EmployeeAPI extends HttpServlet{
         String phai = obj.getJsonString("phai").getString();
         String soDT = obj.getJsonString("soDT").getString();
         String maCN = createBy.getMaCN();
-        String lgName = obj.getJsonString("lgName").getString();
         String pass = obj.getJsonString("pass").getString();
         String role = createBy.getTenNhom();
         
         String messageAfterInsert = employeeService.insertEmployee(ho, ten, diaChi,
-                phai, soDT, maCN, lgName, pass, role);
+                phai, soDT, maCN, pass, role);
         
         JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
         
@@ -77,6 +83,55 @@ public class EmployeeAPI extends HttpServlet{
                     .writeEnd();
             generator.close();
     }
-    
-    
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        
+        JsonReader rdr = Json.createReader(req.getInputStream());
+        JsonObject obj = rdr.readObject();
+        String maNV = obj.getJsonString("maNV").getString();
+        String ho = obj.getJsonString("ho").getString();
+        String ten = obj.getJsonString("ten").getString();
+        String diaChi = obj.getJsonString("diaChi").getString();
+        String phai = obj.getJsonString("phai").getString();
+        String soDT = obj.getJsonString("soDT").getString();
+        String pass = obj.getJsonString("pass").getString();
+        
+        String messageAfterInsert = employeeService.updateEmployee(maNV, ho, ten, diaChi,
+                phai, soDT, pass);
+        
+        JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
+        
+        if (messageAfterInsert==null){
+            messageAfterInsert = "Thêm thành công!";
+        }
+            generator.writeStartObject()
+                    .write("message", messageAfterInsert)
+                    .writeEnd();
+            generator.close();
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        
+        JsonReader rdr = Json.createReader(req.getInputStream());
+        JsonObject obj = rdr.readObject();
+        String maNV = obj.getJsonString("maNV").getString();
+        
+        String messageAfterInsert = employeeService.deleteEmployee(maNV);
+        
+        JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
+        
+        if (messageAfterInsert==null){
+            messageAfterInsert = "Thêm thành công!";
+        }
+            generator.writeStartObject()
+                    .write("message", messageAfterInsert)
+                    .writeEnd();
+            generator.close();
+    }
 }

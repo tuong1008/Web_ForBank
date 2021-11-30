@@ -16,6 +16,10 @@ import model.KhachHang;
  */
 public interface ICustomerDAO extends GenericDAO<KhachHang>{
     public List<KhachHang> getAll();
+    public KhachHang getOne(String cmnd);
     String insertCustomer(String CMND, String ho, String ten, String diaChi, 
                     String phai, Timestamp ngayCap, String soDT, String maCN, BigDecimal soDu);
+    String updateCustomer(String CMND, String ho, String ten, String diaChi, 
+                    String phai, Timestamp ngayCap, String soDT);
+    String deleteCustomer(String CMND);
 }

@@ -11,7 +11,7 @@ import mapper.RowMapper;
 
 public interface GenericDAO<T>  {
     <T> List<T> query(String sql, RowMapper<T> rowMapper, Object... parameters);
-    String crudAction (String sql, Object... parameters);
+    String crudAction (boolean isStoredProcedured, String sql, Object... parameters);
     int count (String sql, Object... parameters);
     ResultSet query(String sql, Object... parameters);
 }

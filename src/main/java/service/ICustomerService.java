@@ -16,5 +16,9 @@ import model.KhachHang;
  */
 public interface ICustomerService {
     List<KhachHang> getAll();
+    KhachHang getOne(String cmnd);
     String insertCustomer(String CMND, String ho, String ten, String diaChi, String phai, Timestamp ngayCap, String soDT, String maCN, BigDecimal soDu);
+    String updateCustomer(String CMND, String ho, String ten, String diaChi, 
+                    String phai, Timestamp ngayCap, String soDT);
+    String deleteCustomer(String CMND);
 }

@@ -1,9 +1,10 @@
 
 import Account from "./view/Account.js";
 import Customer from "./view/Customer.js";
-import CustomerInfo from "./view/CustomerInfo.js";
+import CustomerUpdate from "./view/CustomerUpdate.js";
 import Deposit_Withdraw from "./view/Deposit_Withdraw.js";
 import Employee from "./view/Employee.js";
+import EmployeeUpdate from "./view/EmployeeUpdate.js";
 import Money_Tranfer from "./view/Money_Tranfer.js";
 import Login from "./view/Login.js";
 
@@ -25,11 +26,14 @@ const router = async () => {
         { path: "/money-transfer", view: Money_Tranfer},
         { path: "/deposit-withdraw", view: Deposit_Withdraw},
         { path: "/customer", view: Customer},
-        { path: "/customer/:id", view: CustomerInfo},
+        { path: "/customerUpdate/:id", view: CustomerUpdate},
+        { path: "/customerDelete/:id", view: Customer},
         { path: "/account", view: Account},
         { path: "/login", view: Login},
         { path: "/logout", view: Login},
-        { path: "/employee", view: Employee}
+        { path: "/employee", view: Employee},
+        { path: "/employeeDelete/:id", view: Employee},
+        { path: "/employeeUpdate/:id", view: EmployeeUpdate}
     ];
 
     // Test each route for potential match
@@ -51,10 +55,9 @@ const router = async () => {
     }
 
     const view = new match.route.view(getParams(match));
-
-    document.querySelector("#app").innerHTML =  view.getHtml();
-    view.load();
     if (view instanceof Login){
+        document.querySelector("#app").innerHTML =  view.getHtml();
+        view.load();
         view.setEventBtn(function(){
             navigateTo("/deposit-withdraw");
         });
@@ -63,27 +66,64 @@ const router = async () => {
         }
     }
     else if (view instanceof Employee){
+        if (match.route.path.includes("employeeDelete")){
+            view.setDeleteEvent(function(){
+                navigateTo("/employee");
+            });
+        }
+        else{
+            document.querySelector("#app").innerHTML =  view.getHtml();
+            view.load();
+            view.setEventBtn(function(){
+                navigateTo("/employee");
+            });
+        }
+    }
+    else if (view instanceof EmployeeUpdate){
+        document.querySelector("#app").innerHTML =  view.getHtml();
+        view.load();
         view.setEventBtn(function(){
             navigateTo("/employee");
         });
     }
     else if (view instanceof Customer){
+        if (match.route.path.includes("customerDelete")){
+            view.setDeleteEvent(function(){
+                navigateTo("/customer");
+            });
+        }
+        else{
+            document.querySelector("#app").innerHTML =  view.getHtml();
+            view.load();
+            view.setEventBtn(function(){
+                navigateTo("/customer");
+            });
+        }
+    }
+    else if (view instanceof CustomerUpdate){
+        document.querySelector("#app").innerHTML =  view.getHtml();
+        view.load();
         view.setEventBtn(function(){
             navigateTo("/customer");
         });
     }
     else if (view instanceof Money_Tranfer){
+        document.querySelector("#app").innerHTML =  view.getHtml();
+        view.load();
         view.setEventBtn(function(){
             navigateTo("/money-transfer");
         });
     }
     else if (view instanceof Deposit_Withdraw){
+        document.querySelector("#app").innerHTML =  view.getHtml();
+        view.load();
         view.setEventBtn(function(){
             navigateTo("/deposit-withdraw");
         });
     }
     else{
-        document.querySelector("#app").innerHTML = view.getHtml();
+        document.querySelector("#app").innerHTML =  view.getHtml();
+        view.load();
     }
 };
 
@@ -94,16 +134,13 @@ const navigateTo = url => {
 
 window.addEventListener("popstate", router);
 
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("reload");
+document.addEventListener("DOMContentLoaded", ()=>{
     document.body.addEventListener("click", e => {
         if (e.target.matches("[data-link]")) {
             e.preventDefault();
             navigateTo(e.target.href);
         }
     });
-
-    router()
 });
 
 // window.onload = router;

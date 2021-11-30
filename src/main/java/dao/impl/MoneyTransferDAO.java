@@ -24,7 +24,7 @@ public class MoneyTransferDAO extends AbstractDAO<GD_ChuyenTien> implements IMon
 
     @Override
     public String insertMoneyTransfer(String soTK_Chuyen, BigDecimal soTien, String soTK_Nhan, String maNV) {
-        return crudAction("exec SP_INSERT_GD_CHUYENTIEN ?, ?, ?, ?",
+        return crudAction(true, "exec SP_INSERT_GD_CHUYENTIEN ?, ?, ?, ?",
                 soTK_Chuyen, soTien, soTK_Nhan, maNV);
     }
     

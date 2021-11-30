@@ -37,7 +37,7 @@ public class UserDAO extends AbstractDAO<User> implements IUserDAO{
 
     @Override
     public String insertLogin(String loginName, String password, String userName, String role) {
-        return crudAction("exec dbo.SP_TAOLOGIN ?,?,?,?", loginName, password, userName, role);
+        return crudAction(true, "exec dbo.SP_TAOLOGIN ?,?,?,?", loginName, password, userName, role);
     }
 
     

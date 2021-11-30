@@ -45,8 +45,16 @@ public class CustomerAPI extends HttpServlet{
         ObjectMapper mapper = new ObjectMapper();
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
-        List<KhachHang> accs = customerService.getAll();
-        mapper.writeValue(resp.getOutputStream(), accs);
+        String cmnd = req.getParameter("cmnd");
+        if (cmnd != null){
+            KhachHang cus = customerService.getOne(cmnd);
+            mapper.writeValue(resp.getOutputStream(), cus);
+        }
+        else{
+            List<KhachHang> cuss = customerService.getAll();
+            mapper.writeValue(resp.getOutputStream(), cuss);
+        }
+        
     }
 
     @Override
@@ -83,6 +91,60 @@ public class CustomerAPI extends HttpServlet{
                     .writeEnd();
             generator.close();
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        JsonReader rdr = Json.createReader(req.getInputStream());
+        JsonObject obj = rdr.readObject();
+        
+        String cmnd = obj.getJsonString("cmnd").getString();
+        String ho = obj.getJsonString("ho").getString();
+        String ten = obj.getJsonString("ten").getString();
+        String diaChi = obj.getJsonString("diaChi").getString();
+        String phai = obj.getJsonString("phai").getString();
+        String strNgayCap = obj.getJsonString("ngayCap").getString();
+        Timestamp ngayCap=null;
+        try {
+            ngayCap = new Timestamp(SystemConstant.ddMMyyyy.parse(strNgayCap).getTime());
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        String soDT = obj.getJsonString("soDT").getString();
+        
+        String messageAfterInsert = customerService.updateCustomer(cmnd, ho, ten, diaChi,
+                phai, ngayCap, soDT);
+		JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
+        if (messageAfterInsert==null){
+            messageAfterInsert = "Cập nhật thành công!";
+        }
+            generator.writeStartObject()
+                    .write("message", messageAfterInsert)
+                    .writeEnd();
+            generator.close();
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        JsonReader rdr = Json.createReader(req.getInputStream());
+        JsonObject obj = rdr.readObject();
+        
+        String cmnd = obj.getJsonString("cmnd").getString();
+        
+        String messageAfterInsert = customerService.deleteCustomer(cmnd);
+		JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
+        if (messageAfterInsert==null){
+            messageAfterInsert = "Xoá thành công!";
+        }
+            generator.writeStartObject()
+                    .write("message", messageAfterInsert)
+                    .writeEnd();
+            generator.close();
+    }
+    
     
     
 }

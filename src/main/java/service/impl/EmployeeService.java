@@ -32,7 +32,22 @@ public class EmployeeService implements IEmployeeService{
 
     @Override
     public String insertEmployee(String ho, String ten, String diaChi, String phai, 
-                String soDT, String maCN, String lgName, String pass, String role) {
-        return employeeDAO.insertEmployee(ho, ten, diaChi, phai, soDT, maCN, lgName, pass, role);
+                String soDT, String maCN, String pass, String role) {
+        return employeeDAO.insertEmployee(ho, ten, diaChi, phai, soDT, maCN, pass, role);
+    }
+
+    @Override
+    public String updateEmployee(String maNV, String ho, String ten, String diaChi, String phai, String soDT, String pass) {
+        return employeeDAO.updateEmployee(maNV, ho, ten, diaChi, phai, soDT, pass);
+    }
+
+    @Override
+    public String deleteEmployee(String maNV) {
+        return employeeDAO.deleteEmployee(maNV);
+    }
+
+    @Override
+    public NhanVien getOne(String maNV) {
+        return employeeDAO.getOne(maNV);
     }
 }

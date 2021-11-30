@@ -16,6 +16,10 @@ import model.NhanVien;
 public interface IEmployeeService {
     NhanVien findByUserNameAndPasswordAndStatus(String user, String password, int status);
     List<NhanVien> getAll();
+    NhanVien getOne(String maNV);
     String insertEmployee(String ho, String ten, String diaChi, String phai, 
-                String soDT, String maCN, String lgName, String pass, String role);
+                String soDT, String maCN, String pass, String role);
+    String updateEmployee(String maNV, String ho, String ten, String diaChi, String phai, 
+                String soDT, String pass);
+    String deleteEmployee(String maNV);
 }   

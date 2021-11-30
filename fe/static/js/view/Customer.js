@@ -6,6 +6,35 @@ export default class extends AbstractView {
         this.setTitle("Customer");
     }
 
+    setDeleteEvent(callback){
+        if (confirm("Are you sure DELETE!")) {
+            let cmnd = this.params.id;
+            let object = {'cmnd': cmnd};
+            let url = "http://localhost:8080/Web_ForBank/api-customer";
+            fetch(url, {
+                method: "DELETE",
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(object)
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(result => {
+                    console.log(result);
+                    if ((result.message).includes("thành công")){
+                        callback();
+                    }
+                    else{
+                        document.getElementById("errorMsg").innerHTML =  result.message;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    }
+
     setEventBtn(callback){
         document.getElementById("addBtn").addEventListener("click", function(event) {
             event.preventDefault();
@@ -68,13 +97,17 @@ export default class extends AbstractView {
                     .then(function (response) {
                         return response.json();
                     })
-                    .then(success => {
-                        console.log(success);
-                        callback();
+                    .then(result => {
+                        console.log(result);
+                        if ((result.message).includes("thành công")){
+                            callback();
+                        }
+                        else{
+                            document.getElementById("errorMsg").innerHTML =  result.message;
+                        }
                     })
                     .catch(err => {
-                        //login fail, show message error that return by json
-                        document.getElementById("errorMsg").innerHTML =  err;
+                        console.log(err);
                     });
                 event.preventDefault();
             });
@@ -99,7 +132,10 @@ export default class extends AbstractView {
                     <td>${customer.diaChi}</td>
                     <td>${customer.phai}</td>
                     <td>${customer.ngayCap}</td>
-                    <td>${customer.soDT}</td>`
+                    <td>${customer.soDT}</td>
+                    <td>
+                    <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>
+                    <a href="/customerDelete/${customer.cmnd}" data-link>D</a></td>`;
                     x.appendChild(row);
                 }
             });
@@ -110,14 +146,14 @@ export default class extends AbstractView {
         <button id="addBtn" class="btn btn-primary">Thêm Khách Hàng</button>
         <table id="tblCustomer">
         <tr>
-          <th>CMND</th>
-          <th>Họ</th>
-          <th>Tên</th>
-          <th>Địa chỉ</th>
-          <th>Phái</th>
-          <th>Ngày Cấp</th>
-          <th>Số Điện Thoại</th>
-        </tr>
+            <th>CMND</th>
+            <th>Họ</th>
+            <th>Tên</th>
+            <th>Địa chỉ</th>
+            <th>Phái</th>
+            <th>Ngày Cấp</th>
+            <th>Số Điện Thoại</th>
+       </tr>
       </table>
         `;
     }

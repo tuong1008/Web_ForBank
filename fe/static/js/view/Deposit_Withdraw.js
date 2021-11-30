@@ -47,13 +47,17 @@ export default class extends AbstractView {
                     .then(function (response) {
                         return response.json();
                     })
-                    .then(success => {
-                        console.log(success);
-                        callback();
+                    .then(result => {
+                        console.log(result);
+                        if ((result.message).includes("thành công")){
+                            callback();
+                        }
+                        else{
+                            document.getElementById("errorMsg").innerHTML =  result.message;
+                        }
                     })
                     .catch(err => {
-                        //login fail, show message error that return by json
-                        document.getElementById("errorMsg").innerHTML =  err;
+                        console.log(err);
                     });
                 event.preventDefault();
             });

@@ -17,8 +17,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mapper.RowMapper;
 
 /**
@@ -94,7 +92,7 @@ public class AbstractDAO<T> implements GenericDAO<T>{
     }
 
     @Override
-    public String crudAction(String sql, Object... parameters) {
+    public String crudAction(boolean isStoredProcedured, String sql, Object... parameters) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -104,7 +102,12 @@ public class AbstractDAO<T> implements GenericDAO<T>{
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
             setParameter(statement, parameters);
-            statement.executeQuery();
+            if (isStoredProcedured){
+                statement.executeQuery();
+            }
+            else{
+                statement.executeUpdate();
+            }
             connection.commit();
         } catch (SQLException e) {
             if (connection!=null){
