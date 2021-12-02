@@ -134,6 +134,20 @@ const navigateTo = url => {
 
 window.addEventListener("popstate", router);
 
+$.validator.addMethod("validateSoDT", function (value, element) {
+    return this.optional(element) || /^0[0-9]{9,10}$/i.test(value);
+}, "Hãy nhập đúng định dạng");
+
+$.validator.addMethod("validateTiengViet", function (value, element) {
+    return /^[^0-9`~!@#$%^&*()_=\\+<,.>\/?;:'"[{\]}|]+$/i.test(value);
+}, "Hãy nhập chữ cái tiếng Việt");
+
+$.validator.addMethod("validateNgayCap", function (value, element) {
+    let ngayCap = new Date(value);
+    let hienTai = new Date();
+    return Math.abs(hienTai-ngayCap)>= 504911232000;
+}, "Phải đủ 16 tuổi trở lên");
+
 document.addEventListener("DOMContentLoaded", ()=>{
     document.body.addEventListener("click", e => {
         if (e.target.matches("[data-link]")) {

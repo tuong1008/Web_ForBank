@@ -64,7 +64,7 @@ export default class extends AbstractView {
                 </select>
 
                 <div class="form-group">
-                    <input type="text" class="form-control" id="ngayCap" name="ngayCap"
+                    <input type="date" class="form-control" id="ngayCap" name="ngayCap"
                         placeholder="Ngày Cấp">
                 </div>
                 <div class="form-group">
@@ -78,14 +78,92 @@ export default class extends AbstractView {
                 </div>
                 <button id="signUpBtn" class="btn btn-primary">Mở Tài Khoản</button>
             </form>`;
+            //form validation
+            $("#formSignUp").validate({
+                onkeyup: function(element) {
+                    $(element).valid(); 
+                },
+                rules: {
+                    cmnd: {
+                        required: true,
+                        digits: true,
+                        maxlength: 9
+                    },
+                    ho: {
+                        required: true,
+                        validateTiengViet: true,
+                        maxlength: 50
+                    },
+                    ten: {
+                        required: true,
+                        validateTiengViet: true,
+                        maxlength: 10
+                    },
+                    diaChi: {
+                        maxlength: 100
+                    },
+                    soDu: {
+                        digits: true,
+                        min: 0
+                    },
+                    ngayCap: {
+                        required: true,
+                        date: true,
+                        validateNgayCap: true
+                    },
+                    soDT: {
+                        required: true,
+                        // maxlength: 11
+                        validateSoDT: true
+                    }
+                },
+                messages: {
+                    cmnd: {
+                        required: "Bắt buộc nhập Họ",
+                        digits: "Bắt buộc nhập số",
+                        maxlength: "Hãy nhập tối đa 9 ký tự"
+                    },
+                    ho: {
+                        required: "Bắt buộc nhập Họ",
+                        maxlength: "Hãy nhập tối đa 50 ký tự"
+                    },
+                    ten: {
+                        required: "Bắt buộc nhập Tên",
+                        maxlength: "Hãy nhập tối đa 10 ký tự"
+                    },
+                    diaChi: {
+                        maxlength: "Hãy nhập tối đa 100 ký tự"
+                    },
+                    soDu: {
+                        digits: "Bắt buộc nhập số",
+                        min: "Hãy nhập số dương"
+                    },
+                    ngayCap: {
+                        required: "Bắt buộc nhập ngày",
+                        date: "Nhập sai định dạng"
+                    },
+                    soDT: {
+                        required: "Bắt buộc nhập số điện thoại",
+                        //maxlength: "Hãy nhập tối đa 11 ký tự"
+                    }
+                }
+            });
+            //end form validation
             document.getElementById("signUpBtn").addEventListener("click", function(event){
+                if (!$("#formSignUp").valid()) return;
                 let formSignUp = document.getElementById('formSignUp');
                 let formData = new FormData(formSignUp);
+
+                //formData.append("ngayCap", document.getElementById("ngayCap").value);
                 formData.append("phai", document.getElementById("phai").value);
                 var object = {};
                 formData.forEach(function(value, key){
                     object[key] = value;
                 });
+                let birthday = new Date(object["ngayCap"]) ;
+                console.log(object["ngayCap"]);
+                console.log(birthday);
+                object["ngayCap"] = `${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()}`;
                 console.log(object);
                 let url = "http://localhost:8080/Web_ForBank/api-customer";
                 fetch(url, {
@@ -124,6 +202,7 @@ export default class extends AbstractView {
                 console.log(customers);
                 let x = document.getElementById("tblCustomer");
                 for (let customer of customers) {
+                    let birthday = new Date(customer.ngayCap) ;
                     let row = document.createElement("TR");
                     row.innerHTML = `
                     <td>${customer.cmnd}</td>
@@ -131,7 +210,7 @@ export default class extends AbstractView {
                     <td>${customer.ten}</td>
                     <td>${customer.diaChi}</td>
                     <td>${customer.phai}</td>
-                    <td>${customer.ngayCap}</td>
+                    <td>${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()}</td>
                     <td>${customer.soDT}</td>
                     <td>
                     <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>

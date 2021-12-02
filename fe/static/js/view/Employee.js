@@ -41,7 +41,60 @@ export default class extends AbstractView {
                 </div>
                 <button id="signUpBtn" class="btn btn-primary">Đăng ký</button>
             </form>`;
+            //form validation
+            $("#formSignUp").validate({
+                onkeyup: function(element) {
+                    $(element).valid(); 
+                },
+                rules: {
+                    ho: {
+                        required: true,
+                        validateTiengViet: true,
+                        maxlength: 40
+                    },
+                    ten: {
+                        required: true,
+                        validateTiengViet: true,
+                        maxlength: 10
+                    },
+                    diaChi: {
+                        maxlength: 100
+                    },
+                    soDT: {
+                        required: true,
+                        // maxlength: 11
+                        validateSoDT: true
+                    },
+                    pass: {
+                        required: true,
+                        maxlength: 50
+                    }
+                },
+                messages: {
+                    ho: {
+                        required: "Bắt buộc nhập Họ",
+                        maxlength: "Hãy nhập tối đa 40 ký tự"
+                    },
+                    ten: {
+                        required: "Bắt buộc nhập Tên",
+                        maxlength: "Hãy nhập tối đa 10 ký tự"
+                    },
+                    diaChi: {
+                        maxlength: "Hãy nhập tối đa 100 ký tự"
+                    },
+                    soDT: {
+                        required: "Bắt buộc nhập số điện thoại",
+                        //maxlength: "Hãy nhập tối đa 11 ký tự"
+                    },
+                    pass: {
+                        required: "Bắt buộc nhập mật khẩu",
+                        maxlength: "Hãy nhập tối đa 50 ký tự"
+                    }
+                }
+            });
+            //end form validation
             document.getElementById("signUpBtn").addEventListener("click", function(event){
+                if (!$("#formSignUp").valid()) return;
                 let formSignUp = document.getElementById('formSignUp');
                 let formData = new FormData(formSignUp);
                 formData.append("phai", document.getElementById("phai").value);

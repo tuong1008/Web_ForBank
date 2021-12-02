@@ -28,7 +28,39 @@ export default class extends AbstractView {
                 </div>
                 <button id="signUpBtn" class="btn btn-primary">Xác nhận</button>
             </form>`;
+            //form validation
+            $("#formSignUp").validate({
+                onkeyup: function(element) {
+                    $(element).valid(); 
+                },
+                rules: {
+                    soTK: {
+                        required: true,
+                        digits: true,
+                        maxlength: 9
+                    },
+                    soTien: {
+                        required: true,
+                        digits: true,
+                        min: 100000
+                    }
+                },
+                messages: {
+                    soTK: {
+                        required: "Bắt buộc nhập Số tài khoản",
+                        digits: "Bắt buộc nhập số",
+                        maxlength: "Hãy nhập tối đa 9 ký tự"
+                    },
+                    soTien: {
+                        required: "Bắt buộc nhập Số Tiền",
+                        digits: "Bắt buộc nhập số",
+                        min: "Giao dịch tối thiểu 100000"
+                    }
+                }
+            });
+            //end form validation
             document.getElementById("signUpBtn").addEventListener("click", function(event){
+                if (!$("#formSignUp").valid()) return;
                 let formSignUp = document.getElementById('formSignUp');
                 let formData = new FormData(formSignUp);
                 formData.append("loaiGD", document.getElementById("loaiGD").value);

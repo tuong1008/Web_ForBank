@@ -7,7 +7,79 @@ export default class extends AbstractView {
     }
 
     setEventBtn(callback){
+        //form validation
+        $("#formSignUp").validate({
+            onkeyup: function(element) {
+                $(element).valid(); 
+            },
+            rules: {
+                cmnd: {
+                    required: true,
+                    digits: true,
+                    maxlength: 9
+                },
+                ho: {
+                    required: true,
+                    validateTiengViet: true,
+                    maxlength: 50
+                },
+                ten: {
+                    required: true,
+                    validateTiengViet: true,
+                    maxlength: 10
+                },
+                diaChi: {
+                    maxlength: 100
+                },
+                soDu: {
+                    digits: true,
+                    min: 0
+                },
+                ngayCap: {
+                    required: true,
+                    date: true,
+                    validateNgayCap: true
+                },
+                soDT: {
+                    required: true,
+                    // maxlength: 11
+                    validateSoDT: true
+                }
+            },
+            messages: {
+                cmnd: {
+                    required: "Bắt buộc nhập Họ",
+                    digits: "Bắt buộc nhập số",
+                    maxlength: "Hãy nhập tối đa 9 ký tự"
+                },
+                ho: {
+                    required: "Bắt buộc nhập Họ",
+                    maxlength: "Hãy nhập tối đa 50 ký tự"
+                },
+                ten: {
+                    required: "Bắt buộc nhập Tên",
+                    maxlength: "Hãy nhập tối đa 10 ký tự"
+                },
+                diaChi: {
+                    maxlength: "Hãy nhập tối đa 100 ký tự"
+                },
+                soDu: {
+                    digits: "Bắt buộc nhập số",
+                    min: "Hãy nhập số dương"
+                },
+                ngayCap: {
+                    required: "Bắt buộc nhập ngày",
+                    date: "Nhập sai định dạng"
+                },
+                soDT: {
+                    required: "Bắt buộc nhập số điện thoại",
+                    //maxlength: "Hãy nhập tối đa 11 ký tự"
+                }
+            }
+        });
+        //end form validation
         document.getElementById("signUpBtn").addEventListener("click", function(event){
+            if (!$("#formSignUp").valid()) return;
             let formSignUp = document.getElementById('formSignUp');
             let formData = new FormData(formSignUp);
             formData.append("phai", document.getElementById("phai").value);

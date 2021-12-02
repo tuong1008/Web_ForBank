@@ -16,13 +16,14 @@ export default class extends AbstractView {
                 console.log(accounts);
                 let x = document.getElementById("tblAccount");
                 for (let account of accounts) {
+                    let birthday = new Date(account.ngayMoTK) ;
                     let row = document.createElement("TR");
                     row.innerHTML = `
                     <td>${account.soTK}</td>
                     <td>${account.cmnd}</td>
                     <td>${account.soDu}</td>
                     <td>${account.maCN}</td>
-                    <td>${account.ngayMoTK}</td>
+                    <td>${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
                     `
                     x.appendChild(row);
                 }
