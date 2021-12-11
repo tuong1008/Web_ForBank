@@ -3,14 +3,14 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.setTitle("EmployeeUpdate");
+        this.setTitle("Cập nhật nhân viên");
     }
 
     setEventBtn(callback){
         //form validation
         $("#formSignUp").validate({
             onkeyup: function(element) {
-                $(element).valid(); 
+                $(element).valid();
             },
             rules: {
                 ho: {

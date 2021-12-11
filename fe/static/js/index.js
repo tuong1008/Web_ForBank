@@ -1,4 +1,3 @@
-
 import Account from "./view/Account.js";
 import Customer from "./view/Customer.js";
 import CustomerUpdate from "./view/CustomerUpdate.js";
@@ -7,6 +6,7 @@ import Employee from "./view/Employee.js";
 import EmployeeUpdate from "./view/EmployeeUpdate.js";
 import Money_Tranfer from "./view/Money_Tranfer.js";
 import Login from "./view/Login.js";
+import Stat from "./view/Stat.js";
 
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
@@ -18,8 +18,6 @@ const getParams = match => {
         return [key, values[i]];
     }));
 };
-
-
 
 const router = async () => {
     const routes = [
@@ -33,7 +31,8 @@ const router = async () => {
         { path: "/logout", view: Login},
         { path: "/employee", view: Employee},
         { path: "/employeeDelete/:id", view: Employee},
-        { path: "/employeeUpdate/:id", view: EmployeeUpdate}
+        { path: "/employeeUpdate/:id", view: EmployeeUpdate},
+        { path: "/stat/:id", view: Stat}
     ];
 
     // Test each route for potential match

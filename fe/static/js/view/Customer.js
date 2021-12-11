@@ -3,7 +3,7 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.setTitle("Customer");
+        this.setTitle("Khách hàng");
     }
 
     setDeleteEvent(callback){
@@ -81,7 +81,7 @@ export default class extends AbstractView {
             //form validation
             $("#formSignUp").validate({
                 onkeyup: function(element) {
-                    $(element).valid(); 
+                    $(element).valid();
                 },
                 rules: {
                     cmnd: {

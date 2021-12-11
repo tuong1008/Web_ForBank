@@ -3,7 +3,7 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.setTitle("D_W");
+        this.setTitle("Gửi tiền - Rút tiền");
     }
 
     setEventBtn(callback){
@@ -31,7 +31,7 @@ export default class extends AbstractView {
             //form validation
             $("#formSignUp").validate({
                 onkeyup: function(element) {
-                    $(element).valid(); 
+                    $(element).valid();
                 },
                 rules: {
                     soTK: {

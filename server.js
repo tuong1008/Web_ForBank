@@ -1,11 +1,11 @@
 const express = require("express");
+const app = express();
 const path = require("path");
 
-const app = express();
-
 app.use("/static", express.static(path.resolve(__dirname, "fe", "static")));
+app.use(express.static(path.join(__dirname, '/public')));
 
-app.get("/*", (req, res) => {
+app.get("/index", (req, res) => {
     res.sendFile(path.resolve(__dirname,"fe", "index.html"));
 });
 

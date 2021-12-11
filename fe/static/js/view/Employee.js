@@ -3,7 +3,7 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.setTitle("Employee");
+        this.setTitle("Nhân viên");
     }
 
     setEventBtn(callback){
@@ -44,7 +44,7 @@ export default class extends AbstractView {
             //form validation
             $("#formSignUp").validate({
                 onkeyup: function(element) {
-                    $(element).valid(); 
+                    $(element).valid();
                 },
                 rules: {
                     ho: {
@@ -191,7 +191,7 @@ export default class extends AbstractView {
         return `
         <button id="addBtn" class="btn btn-primary">Thêm Nhân Viên</button>
         <table id="tblEmployee">
-        <tr>
+        <tr class="table table-bordered">
             <th>Mã Nhân Viên</th>
             <th>Họ</th>
             <th>Tên</th>
