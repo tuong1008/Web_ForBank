@@ -73,7 +73,7 @@ export default class extends AbstractView {
             })
             .then(function (accounts) {
                 console.log(accounts);
-                let x = document.getElementById("tblAccount");
+                let x = document.getElementById("table");
                 for (let account of accounts) {
                     let birthday = new Date(account.ngayMoTK);
                     let row = document.createElement("TR");
@@ -96,19 +96,31 @@ export default class extends AbstractView {
     };
 
     getHtml() {
-        return `
-        <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
-        <h2 id="errorMsg"></h2>
-        <table id="tblAccount">
-        <tr>
-          <th>Số Tài Khoản</th>
-          <th>CMND</th>
-          <th>Số Dư</th>
-          <th>Mã Chi Nhánh</th>
-          <th>Ngày Mở TK</th>
-        </tr>
-      </table>
-        `;
+        return `<button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
+<h2 id="errorMsg"></h2>
+<table id="tblAccount" class="table table-primary">
+    <tr>
+        <th>Số Tài Khoản</th>
+        <th>CMND</th>
+        <th>Số Dư</th>
+        <th>Mã Chi Nhánh</th>
+        <th>Ngày Mở TK</th>
+    </tr>
+</table>
 
+<script>
+    $(document).ready(function () {
+        $('#tblAccount').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
+        });
+    });
+</script>
+`;
     }
 }
