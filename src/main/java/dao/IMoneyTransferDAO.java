@@ -8,6 +8,7 @@ package dao;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import model.GD_ChuyenTien;
 
 /**
@@ -15,6 +16,6 @@ import model.GD_ChuyenTien;
  * @author Tuong
  */
 public interface IMoneyTransferDAO extends GenericDAO<GD_ChuyenTien>{
-    public List<GD_ChuyenTien> getAll();
-    String insertMoneyTransfer(String soTK_Chuyen, BigDecimal soTien, String soTK_Nhan, String maNV);
+    public List<GD_ChuyenTien> getAll(HttpServletRequest req);
+    String insertMoneyTransfer(HttpServletRequest req, String soTK_Chuyen, BigDecimal soTien, String soTK_Nhan, String maNV);
 }

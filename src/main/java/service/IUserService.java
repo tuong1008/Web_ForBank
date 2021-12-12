@@ -5,6 +5,7 @@
  */
 package service;
 
+import javax.servlet.http.HttpServletRequest;
 import model.User;
 
 /**
@@ -12,6 +13,8 @@ import model.User;
  * @author Tuong
  */
 public interface IUserService {
-    public User loginAndChangeServer(String serverName, String user, String password);
-    public String insertLogin(String loginName, String password, String userName, String role);
+    public User loginAndChangeServer(HttpServletRequest req, String serverName, String user, String password);
+    public User getOne(HttpServletRequest req, String user);
+    public String insertLogin(HttpServletRequest req, String loginName, String password, String userName, String role);
+    public String updatePassword(HttpServletRequest req, String oldPassword, String password, String maNV);
 }

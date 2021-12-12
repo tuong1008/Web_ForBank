@@ -8,7 +8,7 @@ export default class extends AbstractView {
 
     load() {
         let url = "http://localhost:8080/Web_ForBank/api-subscriber";
-        fetch(url)
+        fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
             })
@@ -47,11 +47,18 @@ export default class extends AbstractView {
                     console.log(success);
                     document.getElementById("nav_item_login").hidden=true;
                     document.getElementById("nav_item_logout").hidden=false;
+                    
+                    let navItemUpdate = document.getElementById("nav_item_update");
+                    navItemUpdate.hidden=false;
+                    navItemUpdate.href = `/employeeUpdate/${success.userName}`;
+
+                    document.getElementById("nav_item_change_pass").hidden=false;
+
                     return callback();
                 })
                 .catch(err => {
                     //login fail, show message error that return by json
-                    document.getElementById("errorMsg").innerHTML =  "Sai tài khoản hoặc mật khẩu!";
+                    document.getElementById("errorMsg").innerHTML =  'Sai tài khoản hoặc mật khẩu';
                 });
                 event.preventDefault();
         });
@@ -60,13 +67,15 @@ export default class extends AbstractView {
     editViewAfterLogout(){
         document.getElementById("nav_item_login").hidden=false;
         document.getElementById("nav_item_logout").hidden=true;
+        document.getElementById("nav_item_update").hidden=true;
+        document.getElementById("nav_item_change_pass").hidden=true;
     }
 
     getHtml() {
         return `
         <h2 id="errorMsg"></h2>
     <form id="formLogin" name="formLogin">
-        <select name="subscribers" id="subscribers"">
+        <select name="subscribers" id="subscribers">
         </select>
         <div class="form-group">
             <input type="text" class="form-control" id="userName" name="userName"

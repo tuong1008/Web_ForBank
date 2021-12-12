@@ -8,6 +8,7 @@ package service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import model.KhachHang;
 
 /**
@@ -15,10 +16,9 @@ import model.KhachHang;
  * @author Tuong
  */
 public interface ICustomerService {
-    List<KhachHang> getAll();
-    KhachHang getOne(String cmnd);
-    String insertCustomer(String CMND, String ho, String ten, String diaChi, String phai, Timestamp ngayCap, String soDT, String maCN, BigDecimal soDu);
-    String updateCustomer(String CMND, String ho, String ten, String diaChi, 
+    List<KhachHang> getAll(HttpServletRequest req);
+    KhachHang getOne(HttpServletRequest req, String cmnd);
+    String insertCustomer(HttpServletRequest req, String CMND, String ho, String ten, String diaChi, String phai, Timestamp ngayCap, String soDT, String maCN, BigDecimal soDu);
+    String updateCustomer(HttpServletRequest req, String CMND, String ho, String ten, String diaChi, 
                     String phai, Timestamp ngayCap, String soDT);
-    String deleteCustomer(String CMND);
 }

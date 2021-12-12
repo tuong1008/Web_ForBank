@@ -30,10 +30,6 @@ export default class extends AbstractView {
                     required: true,
                     // maxlength: 11
                     validateSoDT: true
-                },
-                pass: {
-                    required: true,
-                    maxlength: 50
                 }
             },
             messages: {
@@ -51,10 +47,6 @@ export default class extends AbstractView {
                 soDT: {
                     required: "Bắt buộc nhập số điện thoại",
                     //maxlength: "Hãy nhập tối đa 11 ký tự"
-                },
-                pass: {
-                    required: "Bắt buộc nhập mật khẩu",
-                    maxlength: "Hãy nhập tối đa 50 ký tự"
                 }
             }
         });
@@ -83,6 +75,7 @@ export default class extends AbstractView {
                     console.log(result);
                     if ((result.message).includes("thành công")){
                         callback();
+                        document.getElementById("undoBtn").disabled =  false;
                     }
                     else{
                         document.getElementById("errorMsg").innerHTML =  result.message;
@@ -97,7 +90,7 @@ export default class extends AbstractView {
 
     load() {
         let url = `http://localhost:8080/Web_ForBank/api-employee?maNV=${this.params.id}`;
-        fetch(url)
+        fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
             })
@@ -109,7 +102,6 @@ export default class extends AbstractView {
                 document.getElementById("diaChi").value = employee.diaChi;
                 document.getElementById("phai").value = employee.phai;
                 document.getElementById("soDT").value = employee.soDT;
-                document.getElementById("pass").value = employee.pass;
             });
     };
 
@@ -144,11 +136,6 @@ export default class extends AbstractView {
             <div class="form-group">
                 <input type="text" class="form-control" id="soDT" name="soDT"
                     placeholder="Số Điện Thoại">
-            </div>
-
-            <div class="form-group">
-                <input type="password" class="form-control" id="pass" name="pass"
-                    placeholder="Password">
             </div>
 
             <button id="signUpBtn" class="btn btn-primary">Cập Nhật</button>

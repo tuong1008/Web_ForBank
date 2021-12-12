@@ -6,8 +6,8 @@
 package service.impl;
 
 import dao.IUserDAO;
-import java.util.List;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import model.User;
 import service.IUserService;
 
@@ -20,8 +20,8 @@ public class UserService implements IUserService{
     @Inject
     IUserDAO userDAO;
     @Override
-    public User loginAndChangeServer(String serverName, String user, String password) {
-        User userInfo=userDAO.loginAndChangeServer(serverName, user, password);
+    public User loginAndChangeServer(HttpServletRequest req, String serverName, String user, String password) {
+        User userInfo=userDAO.loginAndChangeServer(req, serverName, user, password);
         if (userInfo==null){
             System.out.println("Sai tai khoan, mat khau");
             return null;
@@ -40,14 +40,24 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public String insertLogin(String loginName, String password, String userName, String role) {
-        String result = userDAO.insertLogin(loginName, password, userName, role);
+    public String insertLogin(HttpServletRequest req, String loginName, String password, String userName, String role) {
+        String result = userDAO.insertLogin(req, loginName, password, userName, role);
         if (result!=null){
             return "Thêm login thất bại!";
         }
         else{
             return "Thêm login thành công!";
         }
+    }
+
+    @Override
+    public User getOne(HttpServletRequest req, String user) {
+        return userDAO.getOne(req, user);
+    }
+
+    @Override
+    public String updatePassword(HttpServletRequest req, String oldPassword, String password, String maNV) {
+        return userDAO.updatePassword(req, oldPassword, password, maNV);
     }
     
 }

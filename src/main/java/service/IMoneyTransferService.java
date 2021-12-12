@@ -8,6 +8,7 @@ package service;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import model.GD_ChuyenTien;
 
 /**
@@ -15,6 +16,6 @@ import model.GD_ChuyenTien;
  * @author Tuong
  */
 public interface IMoneyTransferService {
-    List<GD_ChuyenTien> getAll();
-    String insertMoneyTransfer(GD_ChuyenTien trans);
+    List<GD_ChuyenTien> getAll(HttpServletRequest req);
+    String insertMoneyTransfer(HttpServletRequest req, GD_ChuyenTien trans);
 }

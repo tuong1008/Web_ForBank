@@ -6,35 +6,6 @@ export default class extends AbstractView {
         this.setTitle("Customer");
     }
 
-    setDeleteEvent(callback){
-        if (confirm("Are you sure DELETE!")) {
-            let cmnd = this.params.id;
-            let object = {'cmnd': cmnd};
-            let url = "http://localhost:8080/Web_ForBank/api-customer";
-            fetch(url, {
-                method: "DELETE",
-                credentials: 'include',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(object)
-            })
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(result => {
-                    console.log(result);
-                    if ((result.message).includes("thành công")){
-                        callback();
-                    }
-                    else{
-                        document.getElementById("errorMsg").innerHTML =  result.message;
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-        }
-    }
-
     setEventBtn(callback){
         document.getElementById("addBtn").addEventListener("click", function(event) {
             event.preventDefault();
@@ -113,7 +84,6 @@ export default class extends AbstractView {
                     },
                     soDT: {
                         required: true,
-                        // maxlength: 11
                         validateSoDT: true
                     }
                 },
@@ -144,7 +114,6 @@ export default class extends AbstractView {
                     },
                     soDT: {
                         required: "Bắt buộc nhập số điện thoại",
-                        //maxlength: "Hãy nhập tối đa 11 ký tự"
                     }
                 }
             });
@@ -161,8 +130,6 @@ export default class extends AbstractView {
                     object[key] = value;
                 });
                 let birthday = new Date(object["ngayCap"]) ;
-                console.log(object["ngayCap"]);
-                console.log(birthday);
                 object["ngayCap"] = `${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()}`;
                 console.log(object);
                 let url = "http://localhost:8080/Web_ForBank/api-customer";
@@ -179,6 +146,7 @@ export default class extends AbstractView {
                         console.log(result);
                         if ((result.message).includes("thành công")){
                             callback();
+                            document.getElementById("undoBtn").disabled =  false;
                         }
                         else{
                             document.getElementById("errorMsg").innerHTML =  result.message;
@@ -192,9 +160,37 @@ export default class extends AbstractView {
         });
     }
 
+    setUndoEvent(callback){
+        document.getElementById("undoBtn").addEventListener("click", function(event) {
+            event.preventDefault();
+            let url = "http://localhost:8080/Web_ForBank/api-undo";
+        fetch(url, {credentials: 'include'})
+            .then(function (response) {
+                return response.json();
+            })
+            .then(result => {
+                console.log(result);
+                if ((result.message).includes("Hết")){
+                    callback();
+                    document.getElementById("undoBtn").disabled =  true;
+                }
+                else if ((result.message).includes("thành công")){
+                    callback();
+                    document.getElementById("undoBtn").disabled =  false;
+                }
+                else{
+                    document.getElementById("errorMsg").innerHTML =  result.message;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        });
+    }
+
     load() {
         let url = "http://localhost:8080/Web_ForBank/api-customer";
-        fetch(url)
+        fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
             })
@@ -213,8 +209,7 @@ export default class extends AbstractView {
                     <td>${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()}</td>
                     <td>${customer.soDT}</td>
                     <td>
-                    <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>
-                    <a href="/customerDelete/${customer.cmnd}" data-link>D</a></td>`;
+                    <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>`;
                     x.appendChild(row);
                 }
             });
@@ -223,6 +218,8 @@ export default class extends AbstractView {
     getHtml() {
         return `
         <button id="addBtn" class="btn btn-primary">Thêm Khách Hàng</button>
+        <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
+        <h2 id="errorMsg"></h2>
         <table id="tblCustomer">
         <tr>
             <th>CMND</th>

@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import model.GD_GoiRut;
 import service.IDepositWithdrawService;
 
@@ -23,13 +24,13 @@ public class DepositWithdrawService implements IDepositWithdrawService{
     IDepositWithdrawDAO depositWithdrawDAO;
     
     @Override
-    public List<GD_GoiRut> getAll() {
-        return depositWithdrawDAO.getAll();
+    public List<GD_GoiRut> getAll(HttpServletRequest req) {
+        return depositWithdrawDAO.getAll(req);
     }
 
     @Override
-    public String insertDepositWithdraw(GD_GoiRut trans){
-        return depositWithdrawDAO.insertDepositWithdraw(trans.getSoTK(), 
+    public String insertDepositWithdraw(HttpServletRequest req, GD_GoiRut trans){
+        return depositWithdrawDAO.insertDepositWithdraw(req, trans.getSoTK(), 
                 trans.getLoaiGD(), trans.getSoTien(), trans.getMaNV());
     }
     

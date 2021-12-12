@@ -6,15 +6,17 @@
 package constant;
 
 import java.text.SimpleDateFormat;
+import java.util.Map;
+import model.PhanManh;
 
 /**
  *
  * @author Tuong
  */
 public class SystemConstant {
-    public static String serverName="";
-    public static String user="";
-    public static String password="";
     public static SimpleDateFormat ddMMyyyy = new SimpleDateFormat("dd-MM-yyyy");
-    
+    public static String defaultPassword = "123";
+    public static String HTKN = "HTKN";
+    public static String server3 = "TUONG-PC\\SERVER3";
+    public static  Map<String, PhanManh> subscribersMap = null;
 }

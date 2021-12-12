@@ -5,8 +5,8 @@
  */
 package service;
 
-import java.sql.Timestamp;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import model.NhanVien;
 
 /**
@@ -14,12 +14,16 @@ import model.NhanVien;
  * @author Tuong
  */
 public interface IEmployeeService {
-    NhanVien findByUserNameAndPasswordAndStatus(String user, String password, int status);
-    List<NhanVien> getAll();
-    NhanVien getOne(String maNV);
-    String insertEmployee(String ho, String ten, String diaChi, String phai, 
+    List<NhanVien> getAll(HttpServletRequest req);
+    NhanVien getOne(HttpServletRequest req, String maNV);
+    public NhanVien getBySDTAndMaCN(HttpServletRequest req, String soDT, String maCN);
+    String insertEmployee(HttpServletRequest req, String ho, String ten, String diaChi, String phai, 
                 String soDT, String maCN, String pass, String role);
-    String updateEmployee(String maNV, String ho, String ten, String diaChi, String phai, 
-                String soDT, String pass);
-    String deleteEmployee(String maNV);
+    String updateEmployee(HttpServletRequest req, String maNV, String ho, String ten, String diaChi, String phai, 
+                String soDT);   
+    String deleteEmployee(HttpServletRequest req, String maNV);
+    
+    String transferEmployee(HttpServletRequest req, String maNV,String serverChuyenDen, String maCNChuyenDen);
+    
+    String undoTransferEmployee(HttpServletRequest req, String soDT, String maCNHienTai,String serverChuyenDen, String maCNChuyenDen);
 }   

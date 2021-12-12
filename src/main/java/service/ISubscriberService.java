@@ -6,6 +6,7 @@
 package service;
 
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import model.PhanManh;
 
 /**
@@ -13,5 +14,6 @@ import model.PhanManh;
  * @author Tuong
  */
 public interface ISubscriberService {
-    List<PhanManh> findAllSubscribers();
+    List<PhanManh> findAllSubscribers(HttpServletRequest req);
+    public List<PhanManh> findOtherSubscribers(HttpServletRequest req, String currentSub);
 }

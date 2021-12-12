@@ -35,7 +35,7 @@ public class MoneyTransferAPI extends HttpServlet{
         ObjectMapper mapper = new ObjectMapper();
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
-        List<GD_ChuyenTien> accs = moneyTransferService.getAll();
+        List<GD_ChuyenTien> accs = moneyTransferService.getAll(req);
         mapper.writeValue(resp.getOutputStream(), accs);
     }
 
@@ -44,8 +44,8 @@ public class MoneyTransferAPI extends HttpServlet{
         req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		GD_ChuyenTien trans =  HttpUtil.of(req.getReader()).toModel(GD_ChuyenTien.class);
-                trans.setMaNV(((User) req.getSession().getAttribute("user")).getUserName());
-        String messageAfterInsert = moneyTransferService.insertMoneyTransfer(trans);
+                trans.setMaNV(((User) req.getSession().getAttribute("userInfo")).getUserName());
+        String messageAfterInsert = moneyTransferService.insertMoneyTransfer(req, trans);
 		JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
         if (messageAfterInsert==null){
             messageAfterInsert = "Thêm thành công!";

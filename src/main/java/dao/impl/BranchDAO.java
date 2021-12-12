@@ -7,6 +7,7 @@ package dao.impl;
 
 import dao.IBranchDAO;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import mapper.BranchMapper;
 import model.ChiNhanh;
 
@@ -17,13 +18,8 @@ import model.ChiNhanh;
 public class BranchDAO extends AbstractDAO<ChiNhanh> implements IBranchDAO{
 
     @Override
-    public List<ChiNhanh> getAll() {
-        return query("select * from ChiNhanh", new BranchMapper());
-    }
-
-    @Override
-    public String insertBranch(String maCN, String tenCN, String diaChi, String soDT) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<ChiNhanh> getAll(HttpServletRequest req) {
+        return query(req, "select * from ChiNhanh", new BranchMapper());
     }
     
 }

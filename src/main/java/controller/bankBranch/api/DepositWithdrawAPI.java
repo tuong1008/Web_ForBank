@@ -36,7 +36,7 @@ public class DepositWithdrawAPI extends HttpServlet{
         ObjectMapper mapper = new ObjectMapper();
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
-        List<GD_GoiRut> accs = depositWithdrawService.getAll();
+        List<GD_GoiRut> accs = depositWithdrawService.getAll(req);
         mapper.writeValue(resp.getOutputStream(), accs);
     }
 
@@ -45,8 +45,8 @@ public class DepositWithdrawAPI extends HttpServlet{
         req.setCharacterEncoding("UTF-8");
 		resp.setContentType("application/json");
 		GD_GoiRut trans =  HttpUtil.of(req.getReader()).toModel(GD_GoiRut.class);
-                trans.setMaNV(((User) req.getSession().getAttribute("user")).getUserName());
-                String messageAfterInsert = depositWithdrawService.insertDepositWithdraw(trans);
+                trans.setMaNV(((User) req.getSession().getAttribute("userInfo")).getUserName());
+                String messageAfterInsert = depositWithdrawService.insertDepositWithdraw(req, trans);
 		JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
         if (messageAfterInsert==null){
             messageAfterInsert = "Thêm thành công!";

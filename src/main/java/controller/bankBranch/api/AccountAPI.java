@@ -6,20 +6,28 @@
 package controller.bankBranch.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import constant.SystemConstant;
+import dao.impl.AbstractDAO;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Stack;
 import javax.inject.Inject;
 import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.json.stream.JsonGenerator;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import model.KhachHang;
 import model.TaiKhoan;
+import model.User;
 import service.IAccountService;
-import utils.HttpUtil;
+import service.ICustomerService;
+import service.IUserService;
 
 /**
  *
@@ -29,31 +37,85 @@ import utils.HttpUtil;
 public class AccountAPI extends HttpServlet{
     @Inject
     IAccountService accountService;
+    @Inject
+    ICustomerService customerService;
+    @Inject
+    IUserService userService;
+    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();
         request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        List<TaiKhoan> accs = accountService.getAll();
+        
+        //nếu chuyển qua item khác trên nav thì clear stackToUndo
+        HttpSession session = request.getSession();
+        String currentPage =(String) session.getAttribute("currentPage");
+        if (currentPage == null){
+            currentPage = request.getRequestURI();
+            session.setAttribute("currentPage", currentPage);
+            System.out.println("get "+session.getId());
+        }
+        else if (!request.getRequestURI().equals(currentPage)){
+            Stack<String> stackToUndo =(Stack<String>) session.getAttribute("stackToUndo");
+            if (stackToUndo!=null) stackToUndo.removeAllElements();
+            session.setAttribute("stackToUndo", stackToUndo);
+            currentPage = request.getRequestURI();
+            session.setAttribute("currentPage", currentPage);
+        }
+        
+        List<TaiKhoan> accs = accountService.getAll(request);
         mapper.writeValue(response.getOutputStream(), accs);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
-		resp.setContentType("application/json");
-		TaiKhoan acc =  HttpUtil.of(req.getReader()).toModel(TaiKhoan.class);
-        String messageAfterInsert = accountService.insertAccount(acc);
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        JsonReader rdr = Json.createReader(req.getInputStream());
+        JsonObject obj = rdr.readObject();
+        
+        String soTK = obj.getJsonString("soTK").getString();
+        
+        TaiKhoan oldAcc = accountService.getOne(req,soTK);
+        HttpSession session = req.getSession();
+        
+        //get KH cũ ở server3 để undo, get sẽ có vì delete được là đã đợi đồng bộ insert trước đó xong rồi, nghĩa là lệnh insert đầu tiên đã sync xuống S3
+        User currentUser =(User) session.getAttribute("userInfo");
+        
+        session.setAttribute("serverName", SystemConstant.server3);
+        session.setAttribute("user", SystemConstant.HTKN);
+        session.setAttribute("password", SystemConstant.defaultPassword);
+        KhachHang oldCus = customerService.getOne(req,oldAcc.getCMND());
+        
+        userService.loginAndChangeServer(req, currentUser.getServerName(), currentUser.getUser(), currentUser.getPassword());
+        String messageAfterInsert = accountService.deleteAccount(req,soTK);
 		JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
         if (messageAfterInsert==null){
-            messageAfterInsert = "Thêm thành công!";
+            messageAfterInsert = "Xoá thành công!"; 
+            //cmnd, ho, ten, diaChi, phai, ngayCap, soDT, maCN, soDu
+            String action = "exec dbo.SP_INSERT_KHACHHANG '"+oldCus.getCMND()+"','"+oldCus.getHo()+"','"+oldCus.getTen()+"',\n"+
+                    "'"+oldCus.getDiaChi()+"','"+oldCus.getPhai()+"','"+oldCus.getNgayCap()+"',\n"+
+                    "'"+oldCus.getSoDT()+"','"+oldAcc.getMaCN()+"','"+oldAcc.getSoDu()+"';";
+            System.out.println(action);
+            
+            System.out.println(session.getId());
+            Stack<String> stackToUndo =(Stack<String>) session.getAttribute("stackToUndo");
+            if (stackToUndo==null){
+                System.out.println("new Khoi tao stackToUndo");
+                stackToUndo = new Stack<String>();
+            }
+            stackToUndo.add(action);
+            session.setAttribute("stackToUndo", stackToUndo);
         }
             generator.writeStartObject()
                     .write("message", messageAfterInsert)
                     .writeEnd();
             generator.close();
     }
+
+
     
     
     

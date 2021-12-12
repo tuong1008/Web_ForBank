@@ -8,6 +8,7 @@ package service.impl;
 import dao.IAccountDAO;
 import java.util.List;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import model.TaiKhoan;
 import service.IAccountService;
 
@@ -21,13 +22,23 @@ public class AccountService implements IAccountService{
     IAccountDAO accountDAO;
     
     @Override
-    public List<TaiKhoan> getAll() {
-        return accountDAO.getAll();
+    public List<TaiKhoan> getAll(HttpServletRequest req) {
+        return accountDAO.getAll(req);
     }
 
     @Override
-    public String insertAccount(TaiKhoan acc) {
-        return  accountDAO.insertAccount(acc.getSoTK(), acc.getCMND(), acc.getSoDu(), acc.getMaCN(), acc.getNgayMoTK());
+    public String deleteAccount(HttpServletRequest req, String soTK) {
+        return  accountDAO.deleteAccount(req, soTK);
+    }
+
+    @Override
+    public TaiKhoan getByCMNDAndMaCN(HttpServletRequest req, String cmnd, String maCN) {
+        return accountDAO.getByCMNDAndMaCN(req, cmnd, maCN);
+    }
+
+    @Override
+    public TaiKhoan getOne(HttpServletRequest req, String soTK) {
+        return accountDAO.getOne(req, soTK);
     }
     
 }

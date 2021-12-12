@@ -9,6 +9,7 @@ import dao.IDepositWithdrawDAO;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import mapper.DepositWithdrawMapper;
 import model.GD_GoiRut;
 
@@ -19,13 +20,13 @@ import model.GD_GoiRut;
 public class DepositWithdrawDAO extends AbstractDAO<GD_GoiRut> implements IDepositWithdrawDAO{
 
     @Override
-    public List<GD_GoiRut> getAll() {
-        return query("select * from GD_GoiRut", new DepositWithdrawMapper());
+    public List<GD_GoiRut> getAll(HttpServletRequest req) {
+        return query(req, "select * from GD_GoiRut", new DepositWithdrawMapper());
     }
 
     @Override
-    public String insertDepositWithdraw(String soTK, String loaiGD, BigDecimal soTien, String maNV) {
-        return crudAction(true,"exec SP_INSERT_GD_GoiRut ?, ?, ?, ?",
+    public String insertDepositWithdraw(HttpServletRequest req, String soTK, String loaiGD, BigDecimal soTien, String maNV) {
+        return crudAction(req, true,true, "exec SP_INSERT_GD_GoiRut ?, ?, ?, ?",
                 soTK, loaiGD, soTien, maNV);
     }
     

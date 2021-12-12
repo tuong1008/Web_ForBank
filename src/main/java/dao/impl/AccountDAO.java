@@ -9,6 +9,7 @@ import dao.IAccountDAO;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import mapper.AccountMapper;
 import model.TaiKhoan;
 
@@ -19,13 +20,23 @@ import model.TaiKhoan;
 public class AccountDAO extends AbstractDAO<TaiKhoan> implements IAccountDAO {
 
     @Override
-    public List<TaiKhoan> getAll() {
-        return query("select * from TaiKhoan", new AccountMapper());
+    public List<TaiKhoan> getAll(HttpServletRequest req) {
+        return query(req, "select * from TaiKhoan", new AccountMapper());
     }
 
     @Override
-    public String insertAccount(String soTK, String CMND, BigDecimal soDu, String maCN, Timestamp ngayMoTK) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String deleteAccount(HttpServletRequest req, String soTK) {
+        return crudAction(req, true,true, "exec dbo.SP_DELETE_TAIKHOAN ?;", soTK);
+    }
+
+    @Override
+    public TaiKhoan getByCMNDAndMaCN(HttpServletRequest req, String cmnd, String maCN) {
+        return query(req, "select * from TaiKhoan where CMND=? and maCN = ?", new AccountMapper(),cmnd, maCN).get(0);
+    }
+
+    @Override
+    public TaiKhoan getOne(HttpServletRequest req, String soTK) {
+        return query(req, "select * from TaiKhoan where SOTK = ?", new AccountMapper(), soTK).get(0);
     }
     
 }

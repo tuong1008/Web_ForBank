@@ -6,10 +6,9 @@
 package service.impl;
 
 import dao.IMoneyTransferDAO;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.List;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import model.GD_ChuyenTien;
 import service.IMoneyTransferService;
 
@@ -23,13 +22,13 @@ public class MoneyTransferService implements IMoneyTransferService{
     IMoneyTransferDAO moneyTransferDAO;
 
     @Override
-    public List<GD_ChuyenTien> getAll() {
-        return moneyTransferDAO.getAll();
+    public List<GD_ChuyenTien> getAll(HttpServletRequest req) {
+        return moneyTransferDAO.getAll(req);
     }
 
     @Override
-    public String insertMoneyTransfer(GD_ChuyenTien trans) {
-        return moneyTransferDAO.insertMoneyTransfer(trans.getSoTK_Chuyen(),
+    public String insertMoneyTransfer(HttpServletRequest req, GD_ChuyenTien trans) {
+        return moneyTransferDAO.insertMoneyTransfer(req, trans.getSoTK_Chuyen(),
                 trans.getSoTien(), trans.getSoTK_Nhan(), trans.getMaNV());
     }
     

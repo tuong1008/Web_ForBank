@@ -8,6 +8,7 @@ package service.impl;
 import dao.IBranchDAO;
 import java.util.List;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import model.ChiNhanh;
 import service.IBranchService;
 
@@ -21,8 +22,8 @@ public class BranchService implements IBranchService{
     IBranchDAO branchDAO;
     
     @Override
-    public List<ChiNhanh> getAll() {
-        return branchDAO.getAll();
+    public List<ChiNhanh> getAll(HttpServletRequest req) {
+        return branchDAO.getAll(req);
     }
     
 }

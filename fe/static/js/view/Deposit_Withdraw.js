@@ -98,7 +98,7 @@ export default class extends AbstractView {
 
     load() {
         let url = "http://localhost:8080/Web_ForBank/api-deposit-withdraw";
-        fetch(url)
+        fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
             })

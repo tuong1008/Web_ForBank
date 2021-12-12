@@ -6,9 +6,67 @@ export default class extends AbstractView {
         this.setTitle("Account");
     }
 
+    setDeleteEvent(callback){
+        if (confirm("Are you sure DELETE!")) {
+            let soTK = this.params.id;
+            let object = {'soTK': soTK};
+            let url = "http://localhost:8080/Web_ForBank/api-account";
+            fetch(url, {
+                method: "DELETE",
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(object)
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(result => {
+                    console.log(result);
+                    if ((result.message).includes("thành công")){
+                        callback();
+                        document.getElementById("undoBtn").disabled =  false;
+                    }
+                    else{
+                        document.getElementById("errorMsg").innerHTML =  result.message;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    }
+
+    setUndoEvent(callback){
+        document.getElementById("undoBtn").addEventListener("click", function(event) {
+            event.preventDefault();
+            let url = "http://localhost:8080/Web_ForBank/api-undo";
+        fetch(url, {credentials: 'include'})
+            .then(function (response) {
+                return response.json();
+            })
+            .then(result => {
+                console.log(result);
+                if ((result.message).includes("Hết")){
+                    callback();
+                    document.getElementById("undoBtn").disabled =  true;
+                }
+                else if ((result.message).includes("thành công")){
+                    callback();
+                    document.getElementById("undoBtn").disabled =  false;
+                }
+                else{
+                    document.getElementById("errorMsg").innerHTML =  result.message;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        });
+    }
+
     load() {
         let url = "http://localhost:8080/Web_ForBank/api-account";
-        fetch(url)
+        fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
             })
@@ -24,6 +82,7 @@ export default class extends AbstractView {
                     <td>${account.soDu}</td>
                     <td>${account.maCN}</td>
                     <td>${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
+                    <td><a href="/accountDelete/${account.soTK}" data-link>D</a></td>
                     `
                     x.appendChild(row);
                 }
@@ -32,7 +91,8 @@ export default class extends AbstractView {
 
     getHtml() {
         return `
-        
+        <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
+        <h2 id="errorMsg"></h2>
         <table id="tblAccount">
         <tr>
           <th>Số Tài Khoản</th>

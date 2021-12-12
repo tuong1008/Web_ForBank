@@ -5,9 +5,10 @@
  */
 package dao.impl;
 
-import constant.SystemConstant;
 import dao.IUserDAO;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import mapper.UserMapper;
 import model.User;
 
@@ -18,16 +19,17 @@ import model.User;
 public class UserDAO extends AbstractDAO<User> implements IUserDAO{
 
     @Override
-    public User loginAndChangeServer(String serverName, String user, String password) {
-        SystemConstant.serverName = serverName;
-        SystemConstant.user = user;
-        SystemConstant.password = password;
-        List<User> users= query("exec dbo.SP_DANGNHAP ?", new UserMapper(), user);
+    public User loginAndChangeServer(HttpServletRequest req, String serverName, String user, String password) {
+        HttpSession session = req.getSession();
+        session.setAttribute("serverName", serverName);
+        session.setAttribute("user", user);
+        session.setAttribute("password", password);
+        List<User> users= query(req, "exec dbo.SP_DANGNHAP ?", new UserMapper(), user);
         if (users==null){
             //restore to server0
-            SystemConstant.serverName = resourceBundle.getString("serverName");
-            SystemConstant.user = resourceBundle.getString("user");
-            SystemConstant.password = resourceBundle.getString("password");
+            session.setAttribute("serverName", resourceBundle.getString("serverName"));
+            session.setAttribute("user", resourceBundle.getString("user"));
+            session.setAttribute("password", resourceBundle.getString("password"));
             return null;
         }
         else{
@@ -36,8 +38,18 @@ public class UserDAO extends AbstractDAO<User> implements IUserDAO{
     }
 
     @Override
-    public String insertLogin(String loginName, String password, String userName, String role) {
-        return crudAction(true, "exec dbo.SP_TAOLOGIN ?,?,?,?", loginName, password, userName, role);
+    public String insertLogin(HttpServletRequest req, String loginName, String password, String userName, String role) {
+        return crudAction(req, true,false, "exec dbo.SP_TAOLOGIN ?,?,?,?", loginName, password, userName, role);
+    }
+
+    @Override
+    public User getOne(HttpServletRequest req, String user) {
+        return query(req, "exec dbo.SP_DANGNHAP ?", new UserMapper(), user).get(0);
+    }
+
+    @Override
+    public String updatePassword(HttpServletRequest req, String oldPassword, String password, String maNV) {
+        return crudAction(req, false, true, "exec sp_password ?,?,?",oldPassword, password, maNV);
     }
 
     

@@ -6,6 +6,7 @@
 package dao;
 
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import model.ChiNhanh;
 
 /**
@@ -13,6 +14,5 @@ import model.ChiNhanh;
  * @author Tuong
  */
 public interface IBranchDAO extends GenericDAO<ChiNhanh>{
-    public List<ChiNhanh> getAll();
-    String insertBranch(String maCN, String tenCN, String diaChi, String soDT);
+    public List<ChiNhanh> getAll(HttpServletRequest req);
 }

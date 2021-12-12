@@ -5,7 +5,6 @@
  */
 package dao.impl;
 
-import constant.SystemConstant;
 import dao.GenericDAO;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -17,6 +16,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import mapper.RowMapper;
 
 /**
@@ -24,10 +25,10 @@ import mapper.RowMapper;
  * @author Tuong
  */
 public class AbstractDAO<T> implements GenericDAO<T>{
-    	ResourceBundle resourceBundle = ResourceBundle.getBundle("db");
-        
-        public Connection getConnection(String serverName, String user, String password) {
-		try {
+        public static ResourceBundle resourceBundle = ResourceBundle.getBundle("db");
+    
+        public static Connection getConnection(String serverName, String user, String password) {
+                try {
 			Class.forName(resourceBundle.getString("driverName"));
 			String url = resourceBundle.getString("url");
                         String databaseName = resourceBundle.getString("databaseName");
@@ -36,7 +37,7 @@ public class AbstractDAO<T> implements GenericDAO<T>{
 			return null;
 		}
 	}
-     private void setParameter(PreparedStatement statement, Object... parameters) {
+     public static void setParameter(PreparedStatement statement, Object... parameters) {
         try {
             for (int i = 0; i < parameters.length; i++) {
                 Object parameter = parameters[i];
@@ -58,13 +59,15 @@ public class AbstractDAO<T> implements GenericDAO<T>{
         }
     }
     @Override
-    public <T> List<T> query(String sql, RowMapper<T> rowMapper, Object... parameters) {
+    public <T> List<T> query(HttpServletRequest req, String sql, RowMapper<T> rowMapper, Object... parameters) {
         List<T> results = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
 		try {
-			connection = getConnection(SystemConstant.serverName, SystemConstant.user, SystemConstant.password);
+                        HttpSession session = req.getSession();
+			connection = getConnection(session.getAttribute("serverName").toString(), session.getAttribute("user").toString(),
+                                                                session.getAttribute("password").toString());
 			statement = connection.prepareStatement(sql);
 			setParameter(statement, parameters);
 			resultSet = statement.executeQuery();
@@ -92,14 +95,14 @@ public class AbstractDAO<T> implements GenericDAO<T>{
     }
 
     @Override
-    public String crudAction(boolean isStoredProcedured, String sql, Object... parameters) {
+    public String crudAction(HttpServletRequest req, boolean isStoredProcedured, boolean withTransaction, String sql, Object... parameters) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = getConnection(SystemConstant.serverName,
-                    SystemConstant.user,
-                    SystemConstant.password);
-            connection.setAutoCommit(false);
+            HttpSession session = req.getSession();
+            connection = getConnection(session.getAttribute("serverName").toString(), session.getAttribute("user").toString(),
+                                                                session.getAttribute("password").toString());
+            if (withTransaction) connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
             setParameter(statement, parameters);
             if (isStoredProcedured){
@@ -108,11 +111,11 @@ public class AbstractDAO<T> implements GenericDAO<T>{
             else{
                 statement.executeUpdate();
             }
-            connection.commit();
+            if (withTransaction) connection.commit();
         } catch (SQLException e) {
             if (connection!=null){
                     try {
-                        connection.rollback();
+                        if (withTransaction) connection.rollback();
                     } catch (SQLException e1) {
                         e1.printStackTrace();
                     }

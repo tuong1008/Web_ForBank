@@ -19,8 +19,9 @@ public class SubscriberMapper implements RowMapper<PhanManh>{
     public PhanManh mapRow(ResultSet rs){
         try {
             PhanManh pm = new PhanManh();
-            pm.setTenCN(rs.getString(1));
-            pm.setTenServer(rs.getString(2));
+            pm.setMaCN(rs.getString(1));
+            pm.setTenCN(rs.getString(2));
+            pm.setTenServer(rs.getString(3));
             return pm;
         } catch (SQLException e) {
             return null;

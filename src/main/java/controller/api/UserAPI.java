@@ -14,7 +14,6 @@ import javax.json.JsonReader;
 import javax.json.stream.JsonGenerator;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,11 +39,11 @@ public class UserAPI extends HttpServlet{
         String serverName=request.getHeader("serverName");
         String user=request.getHeader("user");
         String password=request.getHeader("password");
-        User userInfo=userService.loginAndChangeServer(serverName, user, password);
+        User userInfo=userService.loginAndChangeServer(request, serverName, user, password);
         //save useInfo in login      
         if (userInfo != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("user", userInfo);
+            session.setAttribute("userInfo", userInfo);
             System.out.println("Login session: "+ session.getId());
             mapper.writeValue(response.getOutputStream(), userInfo);
         } else {
@@ -70,7 +69,7 @@ public class UserAPI extends HttpServlet{
         String userName = obj.getJsonString("userName").getString();
         String role = obj.getJsonString("role").getString();
         
-        String messageAfterInsertLogin = userService.insertLogin(loginName,
+        String messageAfterInsertLogin = userService.insertLogin(request, loginName,
                 password,
                 userName,
                 role);
@@ -82,5 +81,39 @@ public class UserAPI extends HttpServlet{
                     .writeEnd();
             generator.close();
     }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        
+        JsonReader rdr = Json.createReader(request.getInputStream());
+        JsonObject obj = rdr.readObject();
+        
+        String oldPass = obj.getJsonString("old_pass").getString();
+        String pass = obj.getJsonString("pass").getString();
+        
+        HttpSession session = request.getSession();
+        
+        String messageAfterInsertLogin = userService.updatePassword(request,oldPass, pass, session.getAttribute("user").toString());
+        
+        
+        if (messageAfterInsertLogin == null){
+            messageAfterInsertLogin = "Đổi mật khẩu thành công!";
+        }
+        else{
+            messageAfterInsertLogin = "Mật khẩu sai";
+        }
+        
+        
+        JsonGenerator generator = Json.createGenerator(response.getOutputStream());
+        
+            generator.writeStartObject()
+                    .write("message", messageAfterInsertLogin)
+                    .writeEnd();
+            generator.close();
+    }
+    
+    
     
 }

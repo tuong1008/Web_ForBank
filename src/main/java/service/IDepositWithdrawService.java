@@ -5,9 +5,8 @@
  */
 package service;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import model.GD_GoiRut;
 
 /**
@@ -15,6 +14,6 @@ import model.GD_GoiRut;
  * @author Tuong
  */
 public interface IDepositWithdrawService {
-    List<GD_GoiRut> getAll();
-    String insertDepositWithdraw(GD_GoiRut trans);
+    List<GD_GoiRut> getAll(HttpServletRequest req);
+    String insertDepositWithdraw(HttpServletRequest req, GD_GoiRut trans);
 }

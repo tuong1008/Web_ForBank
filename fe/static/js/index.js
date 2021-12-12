@@ -5,8 +5,10 @@ import CustomerUpdate from "./view/CustomerUpdate.js";
 import Deposit_Withdraw from "./view/Deposit_Withdraw.js";
 import Employee from "./view/Employee.js";
 import EmployeeUpdate from "./view/EmployeeUpdate.js";
+import EmployeeTransfer from "./view/EmployeeTransfer.js";
 import Money_Tranfer from "./view/Money_Tranfer.js";
 import Login from "./view/Login.js";
+import ChangePass from "./view/ChangePass.js";
 
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
@@ -29,11 +31,14 @@ const router = async () => {
         { path: "/customerUpdate/:id", view: CustomerUpdate},
         { path: "/customerDelete/:id", view: Customer},
         { path: "/account", view: Account},
+        { path: "/accountDelete/:id", view: Account},
         { path: "/login", view: Login},
         { path: "/logout", view: Login},
+        { path: "/changePass", view: ChangePass},
         { path: "/employee", view: Employee},
         { path: "/employeeDelete/:id", view: Employee},
-        { path: "/employeeUpdate/:id", view: EmployeeUpdate}
+        { path: "/employeeUpdate/:id", view: EmployeeUpdate},
+        { path: "/employeeTransfer/:id", view: EmployeeTransfer}
     ];
 
     // Test each route for potential match
@@ -65,6 +70,13 @@ const router = async () => {
             view.editViewAfterLogout();
         }
     }
+    if (view instanceof ChangePass){
+        document.querySelector("#app").innerHTML =  view.getHtml();
+        view.load();
+        view.setEventBtn(function(){
+            navigateTo("/deposit-withdraw");
+        });
+    }
     else if (view instanceof Employee){
         if (match.route.path.includes("employeeDelete")){
             view.setDeleteEvent(function(){
@@ -77,6 +89,9 @@ const router = async () => {
             view.setEventBtn(function(){
                 navigateTo("/employee");
             });
+            view.setUndoEvent(function(){
+                navigateTo("/employee");
+            });
         }
     }
     else if (view instanceof EmployeeUpdate){
@@ -86,19 +101,22 @@ const router = async () => {
             navigateTo("/employee");
         });
     }
+    else if (view instanceof EmployeeTransfer){
+        document.querySelector("#app").innerHTML =  view.getHtml();
+        view.load();
+        view.setEventBtn(function(){
+            navigateTo("/employee");
+        });
+    }
     else if (view instanceof Customer){
-        if (match.route.path.includes("customerDelete")){
-            view.setDeleteEvent(function(){
-                navigateTo("/customer");
-            });
-        }
-        else{
-            document.querySelector("#app").innerHTML =  view.getHtml();
+        document.querySelector("#app").innerHTML =  view.getHtml();
             view.load();
             view.setEventBtn(function(){
                 navigateTo("/customer");
             });
-        }
+            view.setUndoEvent(function(){
+                navigateTo("/customer");
+            });
     }
     else if (view instanceof CustomerUpdate){
         document.querySelector("#app").innerHTML =  view.getHtml();
@@ -121,9 +139,19 @@ const router = async () => {
             navigateTo("/deposit-withdraw");
         });
     }
-    else{
-        document.querySelector("#app").innerHTML =  view.getHtml();
-        view.load();
+    else if (view instanceof Account){
+        if (match.route.path.includes("accountDelete")){
+            view.setDeleteEvent(function(){
+                navigateTo("/account");
+            });
+        }
+        else{
+            document.querySelector("#app").innerHTML =  view.getHtml();
+            view.load();
+            view.setUndoEvent(function(){
+                navigateTo("/account");
+            });
+        }
     }
 };
 
@@ -136,7 +164,7 @@ window.addEventListener("popstate", router);
 
 $.validator.addMethod("validateSoDT", function (value, element) {
     return this.optional(element) || /^0[0-9]{9,10}$/i.test(value);
-}, "Hãy nhập đúng định dạng");
+}, "Hãy nhập đúng định dạng và k quá 11 số");
 
 $.validator.addMethod("validateTiengViet", function (value, element) {
     return /^[^0-9`~!@#$%^&*()_=\\+<,.>\/?;:'"[{\]}|]+$/i.test(value);

@@ -117,6 +117,7 @@ export default class extends AbstractView {
                         console.log(result);
                         if ((result.message).includes("thành công")){
                             callback();
+                            document.getElementById("undoBtn").disabled =  false;
                         }
                         else{
                             document.getElementById("errorMsg").innerHTML =  result.message;
@@ -148,6 +149,7 @@ export default class extends AbstractView {
                     console.log(result);
                     if ((result.message).includes("thành công")){
                         callback();
+                        document.getElementById("undoBtn").disabled =  false;
                     }
                     else{
                         document.getElementById("errorMsg").innerHTML =  result.message;
@@ -159,9 +161,37 @@ export default class extends AbstractView {
         }
     }
 
+    setUndoEvent(callback){
+        document.getElementById("undoBtn").addEventListener("click", function(event) {
+            event.preventDefault();
+            let url = "http://localhost:8080/Web_ForBank/api-undo";
+        fetch(url, {credentials: 'include'})
+            .then(function (response) {
+                return response.json();
+            })
+            .then(result => {
+                console.log(result);
+                if ((result.message).includes("Hết")){
+                    callback();
+                    document.getElementById("undoBtn").disabled =  true;
+                }
+                else if ((result.message).includes("thành công")){
+                    callback();
+                    document.getElementById("undoBtn").disabled =  false;
+                }
+                else{
+                    document.getElementById("errorMsg").innerHTML =  result.message;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        });
+    }
+
     load() {
         let url = "http://localhost:8080/Web_ForBank/api-employee";
-        fetch(url)
+        fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
             })
@@ -180,7 +210,9 @@ export default class extends AbstractView {
                     <td>${employee.trangThaiXoa}</td>
                     <td>
                     <a href="/employeeUpdate/${employee.maNV}" data-link>U</a>
-                    <a href="/employeeDelete/${employee.maNV}" data-link>D</a></td>
+                    <a href="/employeeDelete/${employee.maNV}" data-link>D</a>
+                    <a href="/employeeTransfer/${employee.maNV}" data-link>T</a>
+                    </td>
                     `;
                     x.appendChild(row);
                 }
@@ -190,6 +222,8 @@ export default class extends AbstractView {
     getHtml() {
         return `
         <button id="addBtn" class="btn btn-primary">Thêm Nhân Viên</button>
+        <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
+        <h2 id="errorMsg"></h2>
         <table id="tblEmployee">
         <tr>
             <th>Mã Nhân Viên</th>

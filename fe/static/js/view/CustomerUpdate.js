@@ -116,7 +116,7 @@ export default class extends AbstractView {
 
     load() {
         let url = `http://localhost:8080/Web_ForBank/api-customer?cmnd=${this.params.id}`;
-        fetch(url)
+        fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
             })

@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import model.PhanManh;
 import service.ISubscriberService;
 import dao.ISubscriberDAO;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -21,8 +22,13 @@ public class SubscriberService implements ISubscriberService{
     ISubscriberDAO subscriberDAO;
     
     @Override
-    public List<PhanManh> findAllSubscribers() {
-        return subscriberDAO.findAllSubscribers();
+    public List<PhanManh> findAllSubscribers(HttpServletRequest req) {
+        return subscriberDAO.findAllSubscribers(req);
+    }
+
+    @Override
+    public List<PhanManh> findOtherSubscribers(HttpServletRequest req, String currentSub) {
+        return subscriberDAO.findOtherSubscribers(req, currentSub);
     }
     
 }

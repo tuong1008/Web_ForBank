@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Stack;
 import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -25,11 +23,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.KhachHang;
 import model.TaiKhoan;
 import model.User;
+import service.IAccountService;
 import service.ICustomerService;
-import utils.HttpUtil;
 
 /**
  *
@@ -39,19 +38,38 @@ import utils.HttpUtil;
 public class CustomerAPI extends HttpServlet{
     @Inject
     ICustomerService customerService;
+    
+    @Inject
+    IAccountService accountService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
+        
+        //nếu chuyển qua item khác trên nav thì clear stackToUndo
+        HttpSession session = req.getSession();
+        String currentPage =(String) session.getAttribute("currentPage");
+        if (currentPage == null){
+            currentPage = req.getRequestURI();
+            session.setAttribute("currentPage", currentPage);
+        }
+        else if (!req.getRequestURI().equals(currentPage)){
+            Stack<String> stackToUndo =(Stack<String>) session.getAttribute("stackToUndo");
+            if (stackToUndo!=null) stackToUndo.removeAllElements();
+            session.setAttribute("stackToUndo", stackToUndo);
+            currentPage = req.getRequestURI();
+            session.setAttribute("currentPage", currentPage);
+        }
+        
         String cmnd = req.getParameter("cmnd");
         if (cmnd != null){
-            KhachHang cus = customerService.getOne(cmnd);
+            KhachHang cus = customerService.getOne(req, cmnd);
             mapper.writeValue(resp.getOutputStream(), cus);
         }
         else{
-            List<KhachHang> cuss = customerService.getAll();
+            List<KhachHang> cuss = customerService.getAll(req);
             mapper.writeValue(resp.getOutputStream(), cuss);
         }
         
@@ -77,14 +95,23 @@ public class CustomerAPI extends HttpServlet{
             ex.printStackTrace();
         }
         String soDT = obj.getJsonString("soDT").getString();
-        String maCN =((User) req.getSession().getAttribute("user")).getMaCN();
+        String maCN =((User) req.getSession().getAttribute("userInfo")).getMaCN();
         BigDecimal soDu = new BigDecimal(obj.getJsonString("soDu").getString());
         
-        String messageAfterInsert = customerService.insertCustomer(cmnd, ho, ten, diaChi,
+        String messageAfterInsert = customerService.insertCustomer(req, cmnd, ho, ten, diaChi,
                 phai, ngayCap, soDT, maCN, soDu);
 		JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
         if (messageAfterInsert==null){
             messageAfterInsert = "Thêm thành công!";
+            TaiKhoan tkVuaThem = accountService.getByCMNDAndMaCN(req, cmnd, maCN);
+            String action = "exec dbo.SP_DELETE_TAIKHOAN '"+ tkVuaThem.getSoTK() +"';";
+            
+            Stack<String> stackToUndo =(Stack<String>) req.getSession().getAttribute("stackToUndo");
+            if (stackToUndo==null){
+                stackToUndo = new Stack<String>();
+            }
+            stackToUndo.add(action);
+            req.getSession().setAttribute("stackToUndo", stackToUndo);
         }
             generator.writeStartObject()
                     .write("message", messageAfterInsert)
@@ -113,31 +140,24 @@ public class CustomerAPI extends HttpServlet{
         }
         String soDT = obj.getJsonString("soDT").getString();
         
-        String messageAfterInsert = customerService.updateCustomer(cmnd, ho, ten, diaChi,
+        KhachHang old = customerService.getOne(req, cmnd);
+        String messageAfterInsert = customerService.updateCustomer(req, cmnd, ho, ten, diaChi,
                 phai, ngayCap, soDT);
 		JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
         if (messageAfterInsert==null){
             messageAfterInsert = "Cập nhật thành công!";
-        }
-            generator.writeStartObject()
-                    .write("message", messageAfterInsert)
-                    .writeEnd();
-            generator.close();
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("application/json");
-        JsonReader rdr = Json.createReader(req.getInputStream());
-        JsonObject obj = rdr.readObject();
-        
-        String cmnd = obj.getJsonString("cmnd").getString();
-        
-        String messageAfterInsert = customerService.deleteCustomer(cmnd);
-		JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
-        if (messageAfterInsert==null){
-            messageAfterInsert = "Xoá thành công!";
+            String action = "UPDATE KhachHang\n" +
+            "SET HO = '"+old.getHo()+"', TEN = '"+ old.getTen()+"', DIACHI = '"+old.getDiaChi()+"', \n"+
+            "PHAI = '"+old.getPhai()+"', NGAYCAP='"+old.getNgayCap()+"', SODT = '"+old.getSoDT()+"'\n" +
+            "WHERE CMND='"+cmnd+"';";
+            System.out.println(action);
+            
+            Stack<String> stackToUndo =(Stack<String>) req.getSession().getAttribute("stackToUndo");
+            if (stackToUndo==null){
+                stackToUndo = new Stack<String>();
+            }
+            stackToUndo.add(action);
+            req.getSession().setAttribute("stackToUndo", stackToUndo);
         }
             generator.writeStartObject()
                     .write("message", messageAfterInsert)

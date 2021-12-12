@@ -8,6 +8,7 @@ package dao;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import model.TaiKhoan;
 
 /**
@@ -15,6 +16,8 @@ import model.TaiKhoan;
  * @author Tuong
  */
 public interface IAccountDAO extends GenericDAO<TaiKhoan>{
-    public List<TaiKhoan> getAll();
-    public String insertAccount(String soTK, String CMND, BigDecimal soDu, String maCN, Timestamp ngayMoTK);
+    public List<TaiKhoan> getAll(HttpServletRequest req);
+    public TaiKhoan getOne(HttpServletRequest req, String soTK);
+    public TaiKhoan getByCMNDAndMaCN(HttpServletRequest req, String cmnd, String maCN);
+    public String deleteAccount(HttpServletRequest req, String soTK);
 }

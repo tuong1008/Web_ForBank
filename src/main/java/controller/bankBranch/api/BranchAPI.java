@@ -31,7 +31,7 @@ public class BranchAPI extends HttpServlet{
         ObjectMapper mapper = new ObjectMapper();
         req.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
-        List<ChiNhanh> branchs = branchService.getAll();
+        List<ChiNhanh> branchs = branchService.getAll(req);
         mapper.writeValue(resp.getOutputStream(), branchs);
     }
 }
