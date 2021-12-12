@@ -96,7 +96,7 @@ export default class extends AbstractView {
         });
     }
 
-    load() {
+    load(callback) {
         let url = "http://localhost:8080/web_forbank/api-deposit-withdraw";
         fetch(url, {credentials: 'include'})
             .then(function (response) {
@@ -116,6 +116,10 @@ export default class extends AbstractView {
                     <td>${tran.maNV}</td>`
                     x.appendChild(row);
                 }
+            })
+            .catch(err => {
+                console.log(err);
+                callback();
             });
     };
 

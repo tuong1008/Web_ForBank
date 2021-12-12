@@ -189,7 +189,7 @@ export default class extends AbstractView {
         });
     }
 
-    load() {
+    load(callback) {
         let url = "http://localhost:8080/web_forbank/api-employee";
         fetch(url, {credentials: 'include'})
             .then(function (response) {
@@ -216,6 +216,10 @@ export default class extends AbstractView {
                     `;
                     x.appendChild(row);
                 }
+            })
+            .catch(err => {
+                console.log(err);
+                callback();
             });
     };
 

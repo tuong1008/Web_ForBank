@@ -217,7 +217,7 @@ export default class extends AbstractView {
         });
     }
 
-    load() {
+    load(callback) {
         let url = "http://localhost:8080/web_forbank/api-customer";
         fetch(url, {credentials: 'include'})
             .then(function (response) {
@@ -241,6 +241,10 @@ export default class extends AbstractView {
                     <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>`;
                     x.appendChild(row);
                 }
+            })
+            .catch(err => {
+                console.log(err);
+                callback();
             });
     };
 

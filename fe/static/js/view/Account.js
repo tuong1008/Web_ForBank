@@ -64,7 +64,7 @@ export default class extends AbstractView {
         });
     }
 
-    load() {
+    load(callback) {
         let url = "http://localhost:8080/web_forbank/api-account";
         fetch(url, {credentials: 'include'})
 
@@ -85,10 +85,13 @@ export default class extends AbstractView {
                     <td>${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
                     <td><a href="/accountDelete/${account.soTK}" data-link>D</a></td>
                     <td><a class="text-success" href="stat/${account.soTK}">Thống kê</a></td>
-
                     `
                     x.appendChild(row);
                 }
+            })
+            .catch(err => {
+                console.log(err);
+                callback();
             });
     };
 

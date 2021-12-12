@@ -84,7 +84,9 @@ const router = async () => {
         }
         else{
             document.querySelector("#app").innerHTML =  view.getHtml();
-            view.load();
+            view.load(function(){
+                navigateTo("/login");
+            });
             view.setEventBtn(function(){
                 navigateTo("/employee");
             });
@@ -109,13 +111,15 @@ const router = async () => {
     }
     else if (view instanceof Customer){
         document.querySelector("#app").innerHTML =  view.getHtml();
-            view.load();
-            view.setEventBtn(function(){
-                navigateTo("/customer");
-            });
-            view.setUndoEvent(function(){
-                navigateTo("/customer");
-            });
+        view.load(function () {
+            navigateTo("/login");
+        });
+        view.setEventBtn(function () {
+            navigateTo("/customer");
+        });
+        view.setUndoEvent(function () {
+            navigateTo("/customer");
+        });
     }
     else if (view instanceof CustomerUpdate){
         document.querySelector("#app").innerHTML =  view.getHtml();
@@ -126,14 +130,18 @@ const router = async () => {
     }
     else if (view instanceof Money_Transfer){
         document.querySelector("#app").innerHTML =  view.getHtml();
-        view.load();
+        view.load(function(){
+            navigateTo("/login");
+        });
         view.setEventBtn(function(){
             navigateTo("/money-transfer");
         });
     }
     else if (view instanceof Deposit_Withdraw){
         document.querySelector("#app").innerHTML =  view.getHtml();
-        view.load();
+        view.load(function(){
+            navigateTo("/login");
+        });
         view.setEventBtn(function(){
             navigateTo("/deposit-withdraw");
         });
@@ -146,7 +154,9 @@ const router = async () => {
         }
         else{
             document.querySelector("#app").innerHTML =  view.getHtml();
-            view.load();
+            view.load(function(){
+                navigateTo("/login");
+            });
             view.setUndoEvent(function(){
                 navigateTo("/account");
             });
