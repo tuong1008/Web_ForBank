@@ -3,14 +3,14 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.setTitle("Account");
+        this.setTitle("Tài khoản");
     }
 
     setDeleteEvent(callback){
         if (confirm("Are you sure DELETE!")) {
             let soTK = this.params.id;
             let object = {'soTK': soTK};
-            let url = "http://localhost:8080/Web_ForBank/api-account";
+            let url = "http://localhost:8080/web_forbank/api-account";
             fetch(url, {
                 method: "DELETE",
                 credentials: 'include',
@@ -39,7 +39,7 @@ export default class extends AbstractView {
     setUndoEvent(callback){
         document.getElementById("undoBtn").addEventListener("click", function(event) {
             event.preventDefault();
-            let url = "http://localhost:8080/Web_ForBank/api-undo";
+            let url = "http://localhost:8080/web_forbank/api-undo";
         fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
@@ -65,8 +65,9 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = "http://localhost:8080/Web_ForBank/api-account";
+        let url = "http://localhost:8080/web_forbank/api-account";
         fetch(url, {credentials: 'include'})
+
             .then(function (response) {
                 return response.json();
             })
@@ -74,7 +75,7 @@ export default class extends AbstractView {
                 console.log(accounts);
                 let x = document.getElementById("tblAccount");
                 for (let account of accounts) {
-                    let birthday = new Date(account.ngayMoTK) ;
+                    let birthday = new Date(account.ngayMoTK);
                     let row = document.createElement("TR");
                     row.innerHTML = `
                     <td>${account.soTK}</td>
@@ -83,6 +84,8 @@ export default class extends AbstractView {
                     <td>${account.maCN}</td>
                     <td>${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
                     <td><a href="/accountDelete/${account.soTK}" data-link>D</a></td>
+                    <td><a class="text-success" href="stat/${account.soTK}">Thống kê</a></td>
+
                     `
                     x.appendChild(row);
                 }
@@ -103,5 +106,6 @@ export default class extends AbstractView {
         </tr>
       </table>
         `;
+
     }
 }

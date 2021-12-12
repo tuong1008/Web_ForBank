@@ -3,7 +3,36 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.setTitle("Customer");
+        this.setTitle("Khách hàng");
+    }
+
+    setDeleteEvent(callback){
+        if (confirm("Are you sure DELETE!")) {
+            let cmnd = this.params.id;
+            let object = {'cmnd': cmnd};
+            let url = "http://localhost:8080/web_forbank/api-customer";
+            fetch(url, {
+                method: "DELETE",
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(object)
+            })
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(result => {
+                    console.log(result);
+                    if ((result.message).includes("thành công")){
+                        callback();
+                    }
+                    else{
+                        document.getElementById("errorMsg").innerHTML =  result.message;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
     }
 
     setEventBtn(callback){
@@ -52,7 +81,7 @@ export default class extends AbstractView {
             //form validation
             $("#formSignUp").validate({
                 onkeyup: function(element) {
-                    $(element).valid(); 
+                    $(element).valid();
                 },
                 rules: {
                     cmnd: {
@@ -132,7 +161,7 @@ export default class extends AbstractView {
                 let birthday = new Date(object["ngayCap"]) ;
                 object["ngayCap"] = `${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()}`;
                 console.log(object);
-                let url = "http://localhost:8080/Web_ForBank/api-customer";
+                let url = "http://localhost:8080/web_forbank/api-customer";
                 fetch(url, {
                     method: "POST",
                     credentials: 'include',
@@ -163,7 +192,7 @@ export default class extends AbstractView {
     setUndoEvent(callback){
         document.getElementById("undoBtn").addEventListener("click", function(event) {
             event.preventDefault();
-            let url = "http://localhost:8080/Web_ForBank/api-undo";
+            let url = "http://localhost:8080/web_forbank/api-undo";
         fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
@@ -189,7 +218,7 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = "http://localhost:8080/Web_ForBank/api-customer";
+        let url = "http://localhost:8080/web_forbank/api-customer";
         fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();

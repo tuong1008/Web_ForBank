@@ -1,4 +1,3 @@
-
 import Account from "./view/Account.js";
 import Customer from "./view/Customer.js";
 import CustomerUpdate from "./view/CustomerUpdate.js";
@@ -6,9 +5,10 @@ import Deposit_Withdraw from "./view/Deposit_Withdraw.js";
 import Employee from "./view/Employee.js";
 import EmployeeUpdate from "./view/EmployeeUpdate.js";
 import EmployeeTransfer from "./view/EmployeeTransfer.js";
-import Money_Tranfer from "./view/Money_Tranfer.js";
+import Money_Transfer from "./view/Money_Transfer.js";
 import Login from "./view/Login.js";
 import ChangePass from "./view/ChangePass.js";
+import Stat from "./view/Stat.js";
 
 const pathToRegex = path => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
 
@@ -21,11 +21,9 @@ const getParams = match => {
     }));
 };
 
-
-
 const router = async () => {
     const routes = [
-        { path: "/money-transfer", view: Money_Tranfer},
+        { path: "/money-transfer", view: Money_Transfer},
         { path: "/deposit-withdraw", view: Deposit_Withdraw},
         { path: "/customer", view: Customer},
         { path: "/customerUpdate/:id", view: CustomerUpdate},
@@ -38,7 +36,8 @@ const router = async () => {
         { path: "/employee", view: Employee},
         { path: "/employeeDelete/:id", view: Employee},
         { path: "/employeeUpdate/:id", view: EmployeeUpdate},
-        { path: "/employeeTransfer/:id", view: EmployeeTransfer}
+        { path: "/employeeTransfer/:id", view: EmployeeTransfer},
+        { path: "/stat/:id", view: Stat}
     ];
 
     // Test each route for potential match
@@ -125,7 +124,7 @@ const router = async () => {
             navigateTo("/customer");
         });
     }
-    else if (view instanceof Money_Tranfer){
+    else if (view instanceof Money_Transfer){
         document.querySelector("#app").innerHTML =  view.getHtml();
         view.load();
         view.setEventBtn(function(){

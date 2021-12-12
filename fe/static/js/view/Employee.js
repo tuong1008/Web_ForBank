@@ -3,7 +3,7 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.setTitle("Employee");
+        this.setTitle("Nhân viên");
     }
 
     setEventBtn(callback){
@@ -44,7 +44,7 @@ export default class extends AbstractView {
             //form validation
             $("#formSignUp").validate({
                 onkeyup: function(element) {
-                    $(element).valid(); 
+                    $(element).valid();
                 },
                 rules: {
                     ho: {
@@ -103,7 +103,7 @@ export default class extends AbstractView {
                     object[key] = value;
                 });
                 console.log(object);
-                let url = "http://localhost:8080/Web_ForBank/api-employee";
+                let url = "http://localhost:8080/web_forbank/api-employee";
                 fetch(url, {
                     method: "POST",
                     credentials: 'include',
@@ -135,7 +135,7 @@ export default class extends AbstractView {
         if (confirm("Are you sure DELETE!")) {
             let maNV = this.params.id;
             let object = {'maNV': maNV};
-            let url = "http://localhost:8080/Web_ForBank/api-employee";
+            let url = "http://localhost:8080/web_forbank/api-employee";
             fetch(url, {
                 method: "DELETE",
                 credentials: 'include',
@@ -164,7 +164,7 @@ export default class extends AbstractView {
     setUndoEvent(callback){
         document.getElementById("undoBtn").addEventListener("click", function(event) {
             event.preventDefault();
-            let url = "http://localhost:8080/Web_ForBank/api-undo";
+            let url = "http://localhost:8080/web_forbank/api-undo";
         fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
@@ -190,7 +190,7 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = "http://localhost:8080/Web_ForBank/api-employee";
+        let url = "http://localhost:8080/web_forbank/api-employee";
         fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
@@ -225,7 +225,7 @@ export default class extends AbstractView {
         <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
         <h2 id="errorMsg"></h2>
         <table id="tblEmployee">
-        <tr>
+        <tr class="table table-bordered">
             <th>Mã Nhân Viên</th>
             <th>Họ</th>
             <th>Tên</th>

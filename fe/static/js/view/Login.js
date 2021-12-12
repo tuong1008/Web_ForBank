@@ -3,11 +3,11 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.setTitle("Login");
+        this.setTitle("Đăng nhập");
     }
 
     load() {
-        let url = "http://localhost:8080/Web_ForBank/api-subscriber";
+        let url = "http://localhost:8080/web_forbank/api-subscriber";
         fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
@@ -31,7 +31,7 @@ export default class extends AbstractView {
             console.log(formData.get("userName"));
             console.log(formData.get("password"));
             console.log(formData.get("tenServer"));
-            let url = "http://localhost:8080/Web_ForBank/api-user-login";
+            let url = "http://localhost:8080/web_forbank/api-user-login";
             fetch(url, {
                 credentials: 'include',
                 headers: {

@@ -3,14 +3,14 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.setTitle("CustomerUpdate");
+        this.setTitle("Cập nhật thông tin");
     }
 
     setEventBtn(callback){
         //form validation
         $("#formSignUp").validate({
             onkeyup: function(element) {
-                $(element).valid(); 
+                $(element).valid();
             },
             rules: {
                 cmnd: {
@@ -88,7 +88,7 @@ export default class extends AbstractView {
                 object[key] = value;
             });
             console.log(object);
-            let url = "http://localhost:8080/Web_ForBank/api-customer";
+            let url = "http://localhost:8080/web_forbank/api-customer";
             fetch(url, {
                 method: "PUT",
                 credentials: 'include',
@@ -115,7 +115,7 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = `http://localhost:8080/Web_ForBank/api-customer?cmnd=${this.params.id}`;
+        let url = `http://localhost:8080/web_forbank/api-customer?cmnd=${this.params.id}`;
         fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();

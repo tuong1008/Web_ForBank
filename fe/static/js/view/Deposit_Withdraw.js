@@ -3,7 +3,7 @@ import AbstractView from "./AbstractView.js";
 export default class extends AbstractView {
     constructor(params) {
         super(params);
-        this.setTitle("D_W");
+        this.setTitle("Gửi tiền - Rút tiền");
     }
 
     setEventBtn(callback){
@@ -31,7 +31,7 @@ export default class extends AbstractView {
             //form validation
             $("#formSignUp").validate({
                 onkeyup: function(element) {
-                    $(element).valid(); 
+                    $(element).valid();
                 },
                 rules: {
                     soTK: {
@@ -69,7 +69,7 @@ export default class extends AbstractView {
                     object[key] = value;
                 });
                 console.log(object);
-                let url = "http://localhost:8080/Web_ForBank/api-deposit-withdraw";
+                let url = "http://localhost:8080/web_forbank/api-deposit-withdraw";
                 fetch(url, {
                     method: "POST",
                     credentials: 'include',
@@ -97,7 +97,7 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = "http://localhost:8080/Web_ForBank/api-deposit-withdraw";
+        let url = "http://localhost:8080/web_forbank/api-deposit-withdraw";
         fetch(url, {credentials: 'include'})
             .then(function (response) {
                 return response.json();
