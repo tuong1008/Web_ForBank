@@ -103,7 +103,7 @@ export default class extends AbstractView {
                     object[key] = value;
                 });
                 console.log(object);
-                let url = "http://localhost:8080/Web_ForBank/api-employee";
+                let url = "http://localhost:8080/web_forbank/api-employee";
                 fetch(url, {
                     method: "POST",
                     credentials: 'include',
@@ -134,7 +134,7 @@ export default class extends AbstractView {
         if (confirm("Are you sure DELETE!")) {
             let maNV = this.params.id;
             let object = {'maNV': maNV};
-            let url = "http://localhost:8080/Web_ForBank/api-employee";
+            let url = "http://localhost:8080/web_forbank/api-employee";
             fetch(url, {
                 method: "DELETE",
                 credentials: 'include',
@@ -160,7 +160,7 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = "http://localhost:8080/Web_ForBank/api-employee";
+        let url = "http://localhost:8080/web_forbank/api-employee";
         fetch(url)
             .then(function (response) {
                 return response.json();

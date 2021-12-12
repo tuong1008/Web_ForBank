@@ -4,7 +4,7 @@ import CustomerUpdate from "./view/CustomerUpdate.js";
 import Deposit_Withdraw from "./view/Deposit_Withdraw.js";
 import Employee from "./view/Employee.js";
 import EmployeeUpdate from "./view/EmployeeUpdate.js";
-import Money_Tranfer from "./view/Money_Tranfer.js";
+import Money_Transfer from "./view/Money_Transfer.js";
 import Login from "./view/Login.js";
 import Stat from "./view/Stat.js";
 
@@ -21,7 +21,7 @@ const getParams = match => {
 
 const router = async () => {
     const routes = [
-        { path: "/money-transfer", view: Money_Tranfer},
+        { path: "/money-transfer", view: Money_Transfer},
         { path: "/deposit-withdraw", view: Deposit_Withdraw},
         { path: "/customer", view: Customer},
         { path: "/customerUpdate/:id", view: CustomerUpdate},
@@ -106,7 +106,7 @@ const router = async () => {
             navigateTo("/customer");
         });
     }
-    else if (view instanceof Money_Tranfer){
+    else if (view instanceof Money_Transfer){
         document.querySelector("#app").innerHTML =  view.getHtml();
         view.load();
         view.setEventBtn(function(){

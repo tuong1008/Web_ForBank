@@ -7,7 +7,7 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = "http://localhost:8080/Web_ForBank/api-account";
+        let url = "http://localhost:8080/web_forbank/api-account";
         fetch(url)
             .then(function (response) {
                 return response.json();
@@ -33,8 +33,7 @@ export default class extends AbstractView {
 
     getHtml() {
         return `
-<h1 class="text-danger fs-1">Ok</h1>
-<table class="table-dark" id="tblAccount">
+<table class="table-primary" id="tblAccount">
     <thead>
     <tr>
         <th>Số Tài Khoản</th>

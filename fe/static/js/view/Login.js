@@ -7,7 +7,7 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = "http://localhost:8080/Web_ForBank/api-subscriber";
+        let url = "http://localhost:8080/web_forbank/api-subscriber";
         fetch(url)
             .then(function (response) {
                 return response.json();
@@ -31,7 +31,7 @@ export default class extends AbstractView {
             console.log(formData.get("userName"));
             console.log(formData.get("password"));
             console.log(formData.get("tenServer"));
-            let url = "http://localhost:8080/Web_ForBank/api-user-login";
+            let url = "http://localhost:8080/web_forbank/api-user-login";
             fetch(url, {
                 credentials: 'include',
                 headers: {

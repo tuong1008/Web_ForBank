@@ -69,7 +69,7 @@ export default class extends AbstractView {
                 object[key] = value;
             });
             console.log(object);
-            let url = "http://localhost:8080/Web_ForBank/api-employee";
+            let url = "http://localhost:8080/web_forbank/api-employee";
             fetch(url, {
                 method: "PUT",
                 credentials: 'include',
@@ -96,7 +96,7 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = `http://localhost:8080/Web_ForBank/api-employee?maNV=${this.params.id}`;
+        let url = `http://localhost:8080/web_forbank/api-employee?maNV=${this.params.id}`;
         fetch(url)
             .then(function (response) {
                 return response.json();

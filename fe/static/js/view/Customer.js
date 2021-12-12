@@ -10,7 +10,7 @@ export default class extends AbstractView {
         if (confirm("Are you sure DELETE!")) {
             let cmnd = this.params.id;
             let object = {'cmnd': cmnd};
-            let url = "http://localhost:8080/Web_ForBank/api-customer";
+            let url = "http://localhost:8080/web_forbank/api-customer";
             fetch(url, {
                 method: "DELETE",
                 credentials: 'include',
@@ -165,7 +165,7 @@ export default class extends AbstractView {
                 console.log(birthday);
                 object["ngayCap"] = `${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()}`;
                 console.log(object);
-                let url = "http://localhost:8080/Web_ForBank/api-customer";
+                let url = "http://localhost:8080/web_forbank/api-customer";
                 fetch(url, {
                     method: "POST",
                     credentials: 'include',
@@ -193,7 +193,7 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = "http://localhost:8080/Web_ForBank/api-customer";
+        let url = "http://localhost:8080/web_forbank/api-customer";
         fetch(url)
             .then(function (response) {
                 return response.json();

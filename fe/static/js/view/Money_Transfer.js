@@ -76,7 +76,7 @@ export default class extends AbstractView {
                     object[key] = value;
                 });
                 console.log(object);
-                let url = "http://localhost:8080/Web_ForBank/api-money-tranfer";
+                let url = "http://localhost:8080/web_forbank/api-money-tranfer";
                 fetch(url, {
                     method: "POST",
                     credentials: 'include',
@@ -104,7 +104,7 @@ export default class extends AbstractView {
     }
 
     load() {
-        let url = "http://localhost:8080/Web_ForBank/api-money-tranfer";
+        let url = "http://localhost:8080/web_forbank/api-money-tranfer";
         fetch(url)
             .then(function (response) {
                 return response.json();
