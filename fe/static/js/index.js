@@ -80,23 +80,27 @@ const router = async () => {
             view.setDeleteEvent(function () {
                 navigateTo("/employee");
             });
-            $('#tblEmployee').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ]
-            });
         } else {
             document.querySelector("#app").innerHTML = view.getHtml();
-            view.load();
+            view.load(function () {
+                navigateTo("/login");
+            });
             view.setEventBtn(function () {
                 navigateTo("/employee");
             });
             view.setUndoEvent(function () {
                 navigateTo("/employee");
+            });
+            $(document).ready(function () {
+                $('#tblEmployee').DataTable({
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5'
+                    ]
+                });
             });
         }
     } else if (view instanceof EmployeeUpdate) {
@@ -113,13 +117,16 @@ const router = async () => {
         });
     } else if (view instanceof Customer) {
         document.querySelector("#app").innerHTML = view.getHtml();
-        view.load();
+        view.load(function () {
+            navigateTo("/login");
+        });
         view.setEventBtn(function () {
             navigateTo("/customer");
         });
         view.setUndoEvent(function () {
             navigateTo("/customer");
         });
+
         $(document).ready(function () {
             $('#tblCustomer').DataTable({
                 dom: 'Bfrtip',
@@ -139,25 +146,33 @@ const router = async () => {
         });
     } else if (view instanceof Money_Transfer) {
         document.querySelector("#app").innerHTML = view.getHtml();
-        view.load();
-        $('#tblTran').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5'
-            ]
+        view.load(function () {
+            navigateTo("/login");
         });
         view.setEventBtn(function () {
             navigateTo("/money-transfer");
         });
+
+        $(document).ready(function () {
+            $('#tblTran').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+            });
+        });
     } else if (view instanceof Deposit_Withdraw) {
         document.querySelector("#app").innerHTML = view.getHtml();
-        view.load();
+        view.load(function () {
+            navigateTo("/login");
+        });
         view.setEventBtn(function () {
             navigateTo("/deposit-withdraw");
         });
+
         $(document).ready(function () {
             $('#tblTran').DataTable({
                 dom: 'Bfrtip',
@@ -176,7 +191,12 @@ const router = async () => {
             });
         } else {
             document.querySelector("#app").innerHTML = view.getHtml();
-            view.load();
+            view.load(function () {
+                navigateTo("/login");
+            });
+            view.setUndoEvent(function () {
+                navigateTo("/account");
+            });
             $(document).ready(function () {
                 $('#table').DataTable({
                     dom: 'Bfrtip',
@@ -187,9 +207,6 @@ const router = async () => {
                         'pdfHtml5'
                     ]
                 });
-            });
-            view.setUndoEvent(function () {
-                navigateTo("/account");
             });
         }
     }
