@@ -121,17 +121,19 @@ export default class extends AbstractView {
 
     getHtml() {
         return `
-        <button id="addBtn" class="btn btn-primary">Gởi hoặc Rút</button>
-        <table id="tblTran">
-        <tr>
-          <th>Mã Giao Dịch</th>
-          <th>Số Tài Khoản</th>
-          <th>Loại</th>
-          <th>Ngày Giao Dịch</th>
-          <th>Số Tiền</th>
-          <th>Mã Nhân Viên</th>
-        </tr>
-      </table>
+<button id="addBtn" class="btn btn-primary">Gởi hoặc Rút</button>
+<table id="tblTran" class="table-primary">
+    <thead>
+    <tr>
+        <th>Mã Giao Dịch</th>
+        <th>Số Tài Khoản</th>
+        <th>Loại</th>
+        <th>Ngày Giao Dịch</th>
+        <th>Số Tiền</th>
+        <th>Mã Nhân Viên</th>
+    </tr>
+    </thead>
+</table>
         `;
     }
 }

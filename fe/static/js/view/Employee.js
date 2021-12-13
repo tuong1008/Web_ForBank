@@ -224,8 +224,9 @@ export default class extends AbstractView {
         <button id="addBtn" class="btn btn-primary">Thêm Nhân Viên</button>
         <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
         <h2 id="errorMsg"></h2>
-        <table id="tblEmployee">
-        <tr class="table table-bordered">
+        <table id="tblEmployee" class="table-primary">
+        <thead class="table table-bordered">
+        <tr>
             <th>Mã Nhân Viên</th>
             <th>Họ</th>
             <th>Tên</th>
@@ -235,6 +236,7 @@ export default class extends AbstractView {
             <th>Trạng Thái</th>
             <th>Thao tác</th>
         </tr>
+        </thead>
       </table>
         `;
     }

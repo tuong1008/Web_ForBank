@@ -23,21 +23,21 @@ const getParams = match => {
 
 const router = async () => {
     const routes = [
-        { path: "/money-transfer", view: Money_Transfer},
-        { path: "/deposit-withdraw", view: Deposit_Withdraw},
-        { path: "/customer", view: Customer},
-        { path: "/customerUpdate/:id", view: CustomerUpdate},
-        { path: "/customerDelete/:id", view: Customer},
-        { path: "/account", view: Account},
-        { path: "/accountDelete/:id", view: Account},
-        { path: "/login", view: Login},
-        { path: "/logout", view: Login},
-        { path: "/changePass", view: ChangePass},
-        { path: "/employee", view: Employee},
-        { path: "/employeeDelete/:id", view: Employee},
-        { path: "/employeeUpdate/:id", view: EmployeeUpdate},
-        { path: "/employeeTransfer/:id", view: EmployeeTransfer},
-        { path: "/stat/:id", view: Stat}
+        {path: "/money-transfer", view: Money_Transfer},
+        {path: "/deposit-withdraw", view: Deposit_Withdraw},
+        {path: "/customer", view: Customer},
+        {path: "/customerUpdate/:id", view: CustomerUpdate},
+        {path: "/customerDelete/:id", view: Customer},
+        {path: "/account", view: Account},
+        {path: "/accountDelete/:id", view: Account},
+        {path: "/login", view: Login},
+        {path: "/logout", view: Login},
+        {path: "/changePass", view: ChangePass},
+        {path: "/employee", view: Employee},
+        {path: "/employeeDelete/:id", view: Employee},
+        {path: "/employeeUpdate/:id", view: EmployeeUpdate},
+        {path: "/employeeTransfer/:id", view: EmployeeTransfer},
+        {path: "/stat/:id", view: Stat}
     ];
 
     // Test each route for potential match
@@ -59,95 +59,136 @@ const router = async () => {
     }
 
     const view = new match.route.view(getParams(match));
-    if (view instanceof Login){
-        document.querySelector("#app").innerHTML =  view.getHtml();
+    if (view instanceof Login) {
+        document.querySelector("#app").innerHTML = view.getHtml();
         view.load();
-        view.setEventBtn(function(){
+        view.setEventBtn(function () {
             navigateTo("/deposit-withdraw");
         });
-        if (match.route.path == "/logout"){
+        if (match.route.path == "/logout") {
             view.editViewAfterLogout();
         }
     }
-    if (view instanceof ChangePass){
-        document.querySelector("#app").innerHTML =  view.getHtml();
+    if (view instanceof ChangePass) {
+        document.querySelector("#app").innerHTML = view.getHtml();
         view.load();
-        view.setEventBtn(function(){
+        view.setEventBtn(function () {
             navigateTo("/deposit-withdraw");
         });
-    }
-    else if (view instanceof Employee){
-        if (match.route.path.includes("employeeDelete")){
-            view.setDeleteEvent(function(){
+    } else if (view instanceof Employee) {
+        if (match.route.path.includes("employeeDelete")) {
+            view.setDeleteEvent(function () {
+                navigateTo("/employee");
+            });
+            $('#tblEmployee').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+            });
+        } else {
+            document.querySelector("#app").innerHTML = view.getHtml();
+            view.load();
+            view.setEventBtn(function () {
+                navigateTo("/employee");
+            });
+            view.setUndoEvent(function () {
                 navigateTo("/employee");
             });
         }
-        else{
-            document.querySelector("#app").innerHTML =  view.getHtml();
-            view.load();
-            view.setEventBtn(function(){
-                navigateTo("/employee");
-            });
-            view.setUndoEvent(function(){
-                navigateTo("/employee");
-            });
-        }
-    }
-    else if (view instanceof EmployeeUpdate){
-        document.querySelector("#app").innerHTML =  view.getHtml();
+    } else if (view instanceof EmployeeUpdate) {
+        document.querySelector("#app").innerHTML = view.getHtml();
         view.load();
-        view.setEventBtn(function(){
+        view.setEventBtn(function () {
             navigateTo("/employee");
         });
-    }
-    else if (view instanceof EmployeeTransfer){
-        document.querySelector("#app").innerHTML =  view.getHtml();
+    } else if (view instanceof EmployeeTransfer) {
+        document.querySelector("#app").innerHTML = view.getHtml();
         view.load();
-        view.setEventBtn(function(){
+        view.setEventBtn(function () {
             navigateTo("/employee");
         });
-    }
-    else if (view instanceof Customer){
-        document.querySelector("#app").innerHTML =  view.getHtml();
-            view.load();
-            view.setEventBtn(function(){
-                navigateTo("/customer");
-            });
-            view.setUndoEvent(function(){
-                navigateTo("/customer");
-            });
-    }
-    else if (view instanceof CustomerUpdate){
-        document.querySelector("#app").innerHTML =  view.getHtml();
+    } else if (view instanceof Customer) {
+        document.querySelector("#app").innerHTML = view.getHtml();
         view.load();
-        view.setEventBtn(function(){
+        view.setEventBtn(function () {
             navigateTo("/customer");
         });
-    }
-    else if (view instanceof Money_Transfer){
-        document.querySelector("#app").innerHTML =  view.getHtml();
+        view.setUndoEvent(function () {
+            navigateTo("/customer");
+        });
+        $(document).ready(function () {
+            $('#tblCustomer').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+            });
+        });
+    } else if (view instanceof CustomerUpdate) {
+        document.querySelector("#app").innerHTML = view.getHtml();
         view.load();
-        view.setEventBtn(function(){
+        view.setEventBtn(function () {
+            navigateTo("/customer");
+        });
+    } else if (view instanceof Money_Transfer) {
+        document.querySelector("#app").innerHTML = view.getHtml();
+        view.load();
+        $('#tblTran').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
+        });
+        view.setEventBtn(function () {
             navigateTo("/money-transfer");
         });
-    }
-    else if (view instanceof Deposit_Withdraw){
-        document.querySelector("#app").innerHTML =  view.getHtml();
+    } else if (view instanceof Deposit_Withdraw) {
+        document.querySelector("#app").innerHTML = view.getHtml();
         view.load();
-        view.setEventBtn(function(){
+        view.setEventBtn(function () {
             navigateTo("/deposit-withdraw");
         });
-    }
-    else if (view instanceof Account){
-        if (match.route.path.includes("accountDelete")){
-            view.setDeleteEvent(function(){
+        $(document).ready(function () {
+            $('#tblTran').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+            });
+        });
+    } else if (view instanceof Account) {
+        if (match.route.path.includes("accountDelete")) {
+            view.setDeleteEvent(function () {
                 navigateTo("/account");
             });
-        }
-        else{
-            document.querySelector("#app").innerHTML =  view.getHtml();
+        } else {
+            document.querySelector("#app").innerHTML = view.getHtml();
             view.load();
-            view.setUndoEvent(function(){
+            $(document).ready(function () {
+                $('#table').DataTable({
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5'
+                    ]
+                });
+            });
+            view.setUndoEvent(function () {
                 navigateTo("/account");
             });
         }
@@ -172,10 +213,10 @@ $.validator.addMethod("validateTiengViet", function (value, element) {
 $.validator.addMethod("validateNgayCap", function (value, element) {
     let ngayCap = new Date(value);
     let hienTai = new Date();
-    return Math.abs(hienTai-ngayCap)>= 504911232000;
+    return Math.abs(hienTai - ngayCap) >= 504911232000;
 }, "Phải đủ 16 tuổi trở lên");
 
-document.addEventListener("DOMContentLoaded", ()=>{
+document.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener("click", e => {
         if (e.target.matches("[data-link]")) {
             e.preventDefault();

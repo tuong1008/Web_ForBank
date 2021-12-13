@@ -6,7 +6,7 @@ export default class extends AbstractView {
         this.setTitle("Tài khoản");
     }
 
-    setDeleteEvent(callback){
+    setDeleteEvent(callback) {
         if (confirm("Are you sure DELETE!")) {
             let soTK = this.params.id;
             let object = {'soTK': soTK};
@@ -22,12 +22,11 @@ export default class extends AbstractView {
                 })
                 .then(result => {
                     console.log(result);
-                    if ((result.message).includes("thành công")){
+                    if ((result.message).includes("thành công")) {
                         callback();
-                        document.getElementById("undoBtn").disabled =  false;
-                    }
-                    else{
-                        document.getElementById("errorMsg").innerHTML =  result.message;
+                        document.getElementById("undoBtn").disabled = false;
+                    } else {
+                        document.getElementById("errorMsg").innerHTML = result.message;
                     }
                 })
                 .catch(err => {
@@ -36,38 +35,35 @@ export default class extends AbstractView {
         }
     }
 
-    setUndoEvent(callback){
-        document.getElementById("undoBtn").addEventListener("click", function(event) {
+    setUndoEvent(callback) {
+        document.getElementById("undoBtn").addEventListener("click", function (event) {
             event.preventDefault();
             let url = "http://localhost:8080/web_forbank/api-undo";
-        fetch(url, {credentials: 'include'})
-            .then(function (response) {
-                return response.json();
-            })
-            .then(result => {
-                console.log(result);
-                if ((result.message).includes("Hết")){
-                    callback();
-                    document.getElementById("undoBtn").disabled =  true;
-                }
-                else if ((result.message).includes("thành công")){
-                    callback();
-                    document.getElementById("undoBtn").disabled =  false;
-                }
-                else{
-                    document.getElementById("errorMsg").innerHTML =  result.message;
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            });
+            fetch(url, {credentials: 'include'})
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(result => {
+                    console.log(result);
+                    if ((result.message).includes("Hết")) {
+                        callback();
+                        document.getElementById("undoBtn").disabled = true;
+                    } else if ((result.message).includes("thành công")) {
+                        callback();
+                        document.getElementById("undoBtn").disabled = false;
+                    } else {
+                        document.getElementById("errorMsg").innerHTML = result.message;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         });
     }
 
     load() {
         let url = "http://localhost:8080/web_forbank/api-account";
         fetch(url, {credentials: 'include'})
-
             .then(function (response) {
                 return response.json();
             })
@@ -82,7 +78,7 @@ export default class extends AbstractView {
                     <td>${account.cmnd}</td>
                     <td>${account.soDu}</td>
                     <td>${account.maCN}</td>
-                    <td>${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
+                    <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
                     <td><a href="/accountDelete/${account.soTK}" data-link>D</a></td>
                     <td><a class="text-success" href="stat/${account.soTK}">Thống kê</a></td>
 
@@ -93,9 +89,11 @@ export default class extends AbstractView {
     };
 
     getHtml() {
-        return `<button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
+        return `
+<button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
 <h2 id="errorMsg"></h2>
-<table id="tblAccount" class="table table-primary">
+<table id="table" class="table table-primary">
+<thead>
     <tr>
         <th>Số Tài Khoản</th>
         <th>CMND</th>
@@ -103,21 +101,8 @@ export default class extends AbstractView {
         <th>Mã Chi Nhánh</th>
         <th>Ngày Mở TK</th>
     </tr>
+</thead>
 </table>
-
-<script>
-    $(document).ready(function () {
-        $('#tblAccount').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5'
-            ]
-        });
-    });
-</script>
 `;
     }
 }

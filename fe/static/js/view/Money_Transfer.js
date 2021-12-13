@@ -6,10 +6,10 @@ export default class extends AbstractView {
         this.setTitle("Chuyển tiền");
     }
 
-    setEventBtn(callback){
-        document.getElementById("addBtn").addEventListener("click", function(event) {
+    setEventBtn(callback) {
+        document.getElementById("addBtn").addEventListener("click", function (event) {
             event.preventDefault();
-            document.querySelector("#app").innerHTML =`
+            document.querySelector("#app").innerHTML = `
             <h2 id="errorMsg"></h2>
             <form id="formSignUp" name="formSignUp">
                 <div class="form-group">
@@ -28,7 +28,7 @@ export default class extends AbstractView {
             </form>`;
             //form validation
             $("#formSignUp").validate({
-                onkeyup: function(element) {
+                onkeyup: function (element) {
                     $(element).valid();
                 },
                 rules: {
@@ -67,12 +67,12 @@ export default class extends AbstractView {
                 }
             });
             //end form validation
-            document.getElementById("signUpBtn").addEventListener("click", function(event){
+            document.getElementById("signUpBtn").addEventListener("click", function (event) {
                 if (!$("#formSignUp").valid()) return;
                 let formSignUp = document.getElementById('formSignUp');
                 let formData = new FormData(formSignUp);
                 var object = {};
-                formData.forEach(function(value, key){
+                formData.forEach(function (value, key) {
                     object[key] = value;
                 });
                 console.log(object);
@@ -88,11 +88,10 @@ export default class extends AbstractView {
                     })
                     .then(result => {
                         console.log(result);
-                        if ((result.message).includes("thành công")){
+                        if ((result.message).includes("thành công")) {
                             callback();
-                        }
-                        else{
-                            document.getElementById("errorMsg").innerHTML =  result.message;
+                        } else {
+                            document.getElementById("errorMsg").innerHTML = result.message;
                         }
                     })
                     .catch(err => {
@@ -129,17 +128,19 @@ export default class extends AbstractView {
 
     getHtml() {
         return `
-        <button id="addBtn" class="btn btn-primary">Chuyển Tiền</button>
-        <table id="tblTran">
-        <tr>
-          <th>Mã Giao Dịch</th>
-          <th>Tài Khoản Chuyển</th>
-          <th>Ngày Giao Dịch</th>
-          <th>Số Tiền</th>
-          <th>Tài Khoản Nhận</th>
-          <th>Mã Nhân Viên</th>
-        </tr>
-      </table>
+<button id="addBtn" class="btn btn-primary">Chuyển Tiền</button>
+<table id="tblTran" class="table-primary">
+    <thead>
+    <tr>
+        <th>Mã Giao Dịch</th>
+        <th>Tài Khoản Chuyển</th>
+        <th>Ngày Giao Dịch</th>
+        <th>Số Tiền</th>
+        <th>Tài Khoản Nhận</th>
+        <th>Mã Nhân Viên</th>
+    </tr>
+    </thead>
+</table>
         `;
     }
 }
