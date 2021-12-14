@@ -114,11 +114,12 @@ export default class extends AbstractView {
                 let body = document.createElement("tbody");
                 x.appendChild(body);
                 for (let tran of trans) {
+                    let birthday = new Date(tran.ngayGD);
                     let row = document.createElement("TR");
                     row.innerHTML = `
                     <td>${tran.maGD}</td>
                     <td>${tran.soTK_Chuyen}</td>
-                    <td>${tran.ngayGD}</td>
+                    <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
                     <td>${tran.soTien}</td>
                     <td>${tran.soTK_Nhan}</td>
                     <td>${tran.maNV}</td>
