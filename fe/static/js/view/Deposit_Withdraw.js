@@ -104,7 +104,9 @@ export default class extends AbstractView {
             })
             .then(function (trans) {
                 console.log(trans);
-                let x = document.getElementById("tblTran");
+                let x = document.getElementById("table");
+                let body = document.createElement("tbody");
+                x.appendChild(body);
                 for (let tran of trans) {
                     let row = document.createElement("TR");
                     row.innerHTML = `
@@ -114,7 +116,7 @@ export default class extends AbstractView {
                     <td>${tran.ngayGD}</td>
                     <td>${tran.soTien}</td>
                     <td>${tran.maNV}</td>`
-                    x.appendChild(row);
+                    body.appendChild(row);
                 }
             })
             .catch(err => {
@@ -126,7 +128,7 @@ export default class extends AbstractView {
     getHtml() {
         return `
 <button id="addBtn" class="btn btn-primary">Gởi hoặc Rút</button>
-<table id="tblTran" class="table-primary">
+<table id="table" class="table table-primary">
     <thead>
     <tr>
         <th>Mã Giao Dịch</th>

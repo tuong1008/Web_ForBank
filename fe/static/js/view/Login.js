@@ -46,12 +46,6 @@ export default class extends AbstractView {
                 .then(success => {
                     console.log(success);
                     // lưu thông tin user
-                    document.getElementById("serverName").value = success.serverName;
-                    document.getElementById("user").value = success.user;
-                    document.getElementById("password").value = success.password;
-                    document.getElementById("userName").value = success.userName;
-                    document.getElementById("hoTen").value = success.hoTen;
-                    document.getElementById("maCN").value = success.maCN;
                     document.getElementById("tenNhom").value = success.tenNhom;
 
 

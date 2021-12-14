@@ -24,8 +24,7 @@ export default class extends AbstractView {
                     console.log(result);
                     if ((result.message).includes("thành công")) {
                         callback();
-                    }
-                    else {
+                    } else {
                         document.getElementById("errorMsg").innerHTML = result.message;
                     }
                 })
@@ -176,8 +175,7 @@ export default class extends AbstractView {
                         if ((result.message).includes("thành công")) {
                             callback();
                             document.getElementById("undoBtn").disabled = false;
-                        }
-                        else {
+                        } else {
                             document.getElementById("errorMsg").innerHTML = result.message;
                         }
                     })
@@ -193,7 +191,7 @@ export default class extends AbstractView {
         document.getElementById("undoBtn").addEventListener("click", function (event) {
             event.preventDefault();
             let url = "http://localhost:8080/web_forbank/api-undo";
-            fetch(url, { credentials: 'include' })
+            fetch(url, {credentials: 'include'})
                 .then(function (response) {
                     return response.json();
                 })
@@ -202,12 +200,10 @@ export default class extends AbstractView {
                     if ((result.message).includes("Hết")) {
                         callback();
                         document.getElementById("undoBtn").disabled = true;
-                    }
-                    else if ((result.message).includes("thành công")) {
+                    } else if ((result.message).includes("thành công")) {
                         callback();
                         document.getElementById("undoBtn").disabled = false;
-                    }
-                    else {
+                    } else {
                         document.getElementById("errorMsg").innerHTML = result.message;
                     }
                 })
@@ -232,9 +228,14 @@ export default class extends AbstractView {
                 })
                 .then(function (customers) {
                     console.log(customers);
-                    let x = document.getElementById("tblCustomer");
-                    let body = document.createElement("tbody");
-                    x.appendChild(body);
+                    let x = document.getElementById("table");
+                    let hasTbody = document.getElementsByTagName("tbody");
+                    if (hasTbody.length==0){
+                        let body = document.createElement("tbody");
+                        x.appendChild(body);
+                    }else{
+                        hasTbody[0].innerHTML='';
+                    }
                     for (let customer of customers) {
                         let birthday = new Date(customer.ngayCap);
                         let row = document.createElement("TR");
@@ -247,7 +248,7 @@ export default class extends AbstractView {
                         <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()}</td>
                         <td>${customer.soDT}</td>
                         <td>`
-                        body.appendChild(row);
+                        hasTbody[0].appendChild(row);
                     }
                 })
                 .catch(err => {
@@ -265,9 +266,14 @@ export default class extends AbstractView {
             })
             .then(function (customers) {
                 console.log(customers);
-                let x = document.getElementById("tblCustomer");
-                let body = document.createElement("tbody");
-                x.appendChild(body);
+                let x = document.getElementById("table");
+                let hasTbody = document.getElementsByTagName("tbody");
+                if (hasTbody.length==0){
+                    let body = document.createElement("tbody");
+                    x.appendChild(body);
+                }else{
+                    hasTbody[0].innerHTML='';
+                }
                 for (let customer of customers) {
                     let birthday = new Date(customer.ngayCap);
                     let row = document.createElement("TR");
@@ -283,7 +289,7 @@ export default class extends AbstractView {
                         <td>${customer.soDT}</td>
                         <td>
                         <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>`;
-                        body.appendChild(row);
+                        hasTbody[0].appendChild(row);
                     }
                     else{
                         row.innerHTML = `
@@ -295,14 +301,16 @@ export default class extends AbstractView {
                         <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()}</td>
                         <td>${customer.soDT}</td>
                         <td>
-                        <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>`;
-                        body.appendChild(row);
+                        <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>
+                        </td>`;
+                        hasTbody[0].appendChild(row);
                         fetch("http://localhost:8080/web_forbank/api-subscriber", {credentials: 'include'})
                             .then(function (response) {
                                 return response.json();
                             })
                             .then(function (subscribers) {
                                 let x = document.getElementById("subscribers");
+                                $("#subscribers").empty();
                                 for (let subscriber of subscribers) {
                                     let option = document.createElement("option");
                                     option.text = subscriber.tenCN;
@@ -329,7 +337,7 @@ export default class extends AbstractView {
             </select>
             <button id="signUpBtn" class="btn btn-primary">Liệt kê</button>
         </form>
-        <table id="tblCustomer" class="table table-primary">
+        <table id="table" class="table table-primary">
             <thead>
             <tr>
                 <th>CMND</th>
@@ -339,6 +347,7 @@ export default class extends AbstractView {
                 <th>Phái</th>
                 <th>Ngày Cấp</th>
                 <th>Số Điện Thoại</th>
+                <th></th>
             </tr>
             </thead>
         </table>
@@ -349,7 +358,7 @@ export default class extends AbstractView {
         <button id="addBtn" class="btn btn-primary">Thêm Khách Hàng</button>
         <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
         <h2 id="errorMsg"></h2>
-        <table id="tblCustomer" class="table table-primary">
+        <table id="table" class="table table-primary">
             <thead>
             <tr>
                 <th>CMND</th>

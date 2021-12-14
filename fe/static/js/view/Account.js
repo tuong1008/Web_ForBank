@@ -24,8 +24,13 @@ export default class extends AbstractView {
                 .then(accounts => {
                     console.log(accounts);
                 let x = document.getElementById("table");
-                let body = document.createElement("tbody");
-                x.appendChild(body);
+                let hasTbody = document.getElementsByTagName("tbody");
+                if (hasTbody.length==0){
+                    let body = document.createElement("tbody");
+                    x.appendChild(body);
+                }else{
+                    hasTbody[0].innerHTML='';
+                }
                 for (let account of accounts) {
                     let birthday = new Date(account.ngayMoTK);
                     let row = document.createElement("TR");
@@ -37,7 +42,7 @@ export default class extends AbstractView {
                         <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
                         <td><a class="text-success" href="stat/${account.soTK}" data-link>Sao kê</a></td>
                         `
-                    body.appendChild(row);
+                        hasTbody[0].appendChild(row);
                 }
                 })
                 .catch(err => {
@@ -110,8 +115,13 @@ export default class extends AbstractView {
             .then(function (accounts) {
                 console.log(accounts);
                 let x = document.getElementById("table");
-                let body = document.createElement("tbody");
-                x.appendChild(body);
+                let hasTbody = document.getElementsByTagName("tbody");
+                if (hasTbody.length==0){
+                    let body = document.createElement("tbody");
+                    x.appendChild(body);
+                }else{
+                    hasTbody[0].innerHTML='';
+                }
                 for (let account of accounts) {
                     let birthday = new Date(account.ngayMoTK);
                     let row = document.createElement("TR");
@@ -126,7 +136,7 @@ export default class extends AbstractView {
                         <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
                         <td><a href="/accountDelete/${account.soTK}" data-link>D</a></td>
                         `
-                        body.appendChild(row);
+                        hasTbody[0].appendChild(row);
                     }
                     else{
                         row.innerHTML = `
@@ -137,13 +147,14 @@ export default class extends AbstractView {
                         <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
                         <td><a class="text-success" href="stat/${account.soTK}" data-link>Sao kê</a></td>
                         `
-                        x.appendChild(row);
+                        hasTbody[0].appendChild(row);
                         fetch("http://localhost:8080/web_forbank/api-subscriber", {credentials: 'include'})
                             .then(function (response) {
                                 return response.json();
                             })
                             .then(function (subscribers) {
                                 let x = document.getElementById("subscribers");
+                                $("#subscribers").empty();
                                 for (let subscriber of subscribers) {
                                     let option = document.createElement("option");
                                     option.text = subscriber.tenCN;
@@ -185,6 +196,7 @@ export default class extends AbstractView {
                 <th>Số Dư</th>
                 <th>Mã Chi Nhánh</th>
                 <th>Ngày Mở TK</th>
+                <th></th>
             </tr>
         </thead>
         </table>
@@ -202,6 +214,7 @@ export default class extends AbstractView {
                 <th>Số Dư</th>
                 <th>Mã Chi Nhánh</th>
                 <th>Ngày Mở TK</th>
+                <th></th>
             </tr>
         </thead>
         </table>

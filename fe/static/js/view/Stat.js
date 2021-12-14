@@ -48,8 +48,13 @@ export default class extends AbstractView {
             .then(function (trans) {
                 console.log(trans);
                 let x = document.getElementById("table");
-                let body = document.createElement("tbody");
-                x.appendChild(body);
+                let hasTbody = document.getElementsByTagName("tbody");
+                if (hasTbody.length == 0) {
+                    let body = document.createElement("tbody");
+                    x.appendChild(body);
+                } else {
+                    hasTbody[0].innerHTML = '';
+                }
                 for (let tran of trans) {
                     let ngayGD = new Date(tran.ngayGD);
                     let row = document.createElement("TR");
@@ -61,7 +66,7 @@ export default class extends AbstractView {
                         <td>${tran.soTien}</td>
                         <td>${tran.balanceAfter}</td>
                         `
-                    body.appendChild(row);
+                    hasTbody[0].appendChild(row);
                 }
             })
             .catch(err => {
