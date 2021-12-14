@@ -228,6 +228,8 @@ export default class extends AbstractView {
                 })
                 .then(function (customers) {
                     console.log(customers);
+                    console.log("destroy table");
+
                     let x = document.getElementById("table");
                     let hasTbody = document.getElementsByTagName("tbody");
                     if (hasTbody.length==0){
@@ -249,6 +251,20 @@ export default class extends AbstractView {
                         <td>${customer.soDT}</td>
                         <td>`
                         hasTbody[0].appendChild(row);
+
+                        console.log("clicking");
+
+                        setTimeout(function () {
+                            $('#table').DataTable({
+                                dom: 'Bfrtip',
+                                buttons: [
+                                    'copyHtml5',
+                                    'excelHtml5',
+                                    'csvHtml5',
+                                    'pdfHtml5'
+                                ]
+                            });
+                        }, 300);
                     }
                 })
                 .catch(err => {
@@ -317,6 +333,10 @@ export default class extends AbstractView {
                                     option.value = subscriber.tenServer;
                                     x.add(option);
                                 }
+                                let opt = document.createElement("option");
+                                opt.text = "Tất cả";
+                                opt.value = "getAll";
+                                x.add(opt);
                             });
                     }
                 }

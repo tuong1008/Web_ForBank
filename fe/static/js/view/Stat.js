@@ -58,7 +58,7 @@ export default class extends AbstractView {
                 for (let tran of trans) {
                     let ngayGD = new Date(tran.ngayGD);
                     let row = document.createElement("TR");
-                    
+
                     row.innerHTML = `
                         <td>${tran.balanceBefore}</td>
                         <td>${ngayGD.getDate()}-${ngayGD.getMonth() + 1}-${ngayGD.getFullYear()} ${ngayGD.getHours()}:${ngayGD.getMinutes()}</td>
@@ -68,6 +68,7 @@ export default class extends AbstractView {
                         `
                     hasTbody[0].appendChild(row);
                 }
+
             })
             .catch(err => {
                 console.log(err);

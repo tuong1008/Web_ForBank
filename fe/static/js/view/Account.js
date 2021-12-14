@@ -125,7 +125,7 @@ export default class extends AbstractView {
                 for (let account of accounts) {
                     let birthday = new Date(account.ngayMoTK);
                     let row = document.createElement("TR");
-                    
+
                     let tenNhom = document.getElementById("tenNhom").value;
                     if (tenNhom=="CHINHANH"){
                         row.innerHTML = `
@@ -161,9 +161,13 @@ export default class extends AbstractView {
                                     option.value = subscriber.maCN;
                                     x.add(option);
                                 }
+                                let opt = document.createElement("option");
+                                opt.text = "Tất cả";
+                                opt.value = "getAll";
+                                x.add(opt);
                             });
                     }
-                    
+
                 }
             })
             .catch(err => {
