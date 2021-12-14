@@ -122,7 +122,7 @@ const router = async () => {
         view.load(function () {
             navigateTo("/login");
         });
-        let tenNhom=document.getElementById("tenNhom");
+        let tenNhom=document.getElementById("tenNhom").value;
         if (tenNhom=="CHINHANH"){
             view.setEventBtn(function () {
                 navigateTo("/customer");

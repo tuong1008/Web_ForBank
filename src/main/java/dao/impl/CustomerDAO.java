@@ -21,7 +21,7 @@ public class CustomerDAO extends AbstractDAO<KhachHang> implements ICustomerDAO{
 
     @Override
     public List<KhachHang> getAll(HttpServletRequest req) {
-        return query(req, "select * from KhachHang", new CustomerMapper());
+        return query(req, "select * from KhachHang order by macn, ten", new CustomerMapper());
     }
 
     @Override   //Thêm khách hàng và cấp tài khoản

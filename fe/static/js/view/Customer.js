@@ -249,7 +249,10 @@ export default class extends AbstractView {
                         <td>${customer.phai}</td>
                         <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()}</td>
                         <td>${customer.soDT}</td>
-                        <td>`
+                        <td>
+                        <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>
+                        </td>
+                        `
                         hasTbody[0].appendChild(row);
 
                         console.log("clicking");
@@ -304,7 +307,8 @@ export default class extends AbstractView {
                         <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()}</td>
                         <td>${customer.soDT}</td>
                         <td>
-                        <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>`;
+                        <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>
+                        </td>`;
                         hasTbody[0].appendChild(row);
                     }
                     else{
