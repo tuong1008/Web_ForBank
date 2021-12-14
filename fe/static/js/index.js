@@ -58,7 +58,8 @@ const router = async () => {
         };
     }
 
-    const view = new match.route.view(getParams(match));
+    let params = getParams(match);
+    const view = new match.route.view(params);
     if (view instanceof Login) {
         document.querySelector("#app").innerHTML = view.getHtml();
         view.load();
@@ -132,20 +133,10 @@ const router = async () => {
             });
         }
         else{
-            view.setLietKeEvent();
-        }
-
-        setTimeout(function () {
-            $('#table').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ]
+            view.setLietKeEvent(function () {
+                navigateTo("/customer");
             });
-        }, 300);
+        }
 
     } else if (view instanceof CustomerUpdate) {
         document.querySelector("#app").innerHTML = view.getHtml();
@@ -213,25 +204,17 @@ const router = async () => {
                 });
             }
             else{
-                view.setEventBtn();
-            }
-
-            setTimeout(function () {
-                $('#table').DataTable({
-                    dom: 'Bfrtip',
-                    buttons: [
-                        'copyHtml5',
-                        'excelHtml5',
-                        'csvHtml5',
-                        'pdfHtml5'
-                    ]
+                view.setEventBtn(function () {
+                    navigateTo("/account");
                 });
-            }, 300);
+            }
         }
     }
     else if (view instanceof Stat) {
         document.querySelector("#app").innerHTML = view.getHtml();
-        view.setEventBtn();
+        view.setEventBtn(function () {
+            navigateTo(`/stat/${params.id}`);
+        });
     }
 };
 

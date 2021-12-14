@@ -213,7 +213,7 @@ export default class extends AbstractView {
         });
     }
 
-    setLietKeEvent() {
+    setLietKeEvent(callback) {
         document.getElementById("signUpBtn").addEventListener("click", function (event) {
             event.preventDefault();
             let formSignUp = document.getElementById('formSignUp');
@@ -228,8 +228,8 @@ export default class extends AbstractView {
                 })
                 .then(function (customers) {
                     console.log(customers);
-                    console.log("destroy table");
 
+                    callback(); //to reload
                     let x = document.getElementById("table");
                     let hasTbody = document.getElementsByTagName("tbody");
                     if (hasTbody.length==0){
@@ -256,23 +256,21 @@ export default class extends AbstractView {
                         hasTbody[0].appendChild(row);
 
                         console.log("clicking");
-
-                        setTimeout(function () {
-                            $('#table').DataTable({
-                                dom: 'Bfrtip',
-                                buttons: [
-                                    'copyHtml5',
-                                    'excelHtml5',
-                                    'csvHtml5',
-                                    'pdfHtml5'
-                                ]
-                            });
-                        }, 300);
                     }
+                    setTimeout(function () {
+                        $('#table').DataTable({
+                            dom: 'Bfrtip',
+                            buttons: [
+                                'copyHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                                'pdfHtml5'
+                            ]
+                        });
+                    }, 300);
                 })
                 .catch(err => {
                     console.log(err);
-                    callback();
                 });
         });
     }
@@ -284,47 +282,9 @@ export default class extends AbstractView {
                 return response.json();
             })
             .then(function (customers) {
-                console.log(customers);
-                let x = document.getElementById("table");
-                let hasTbody = document.getElementsByTagName("tbody");
-                if (hasTbody.length==0){
-                    let body = document.createElement("tbody");
-                    x.appendChild(body);
-                }else{
-                    hasTbody[0].innerHTML='';
-                }
-                for (let customer of customers) {
-                    let birthday = new Date(customer.ngayCap);
-                    let row = document.createElement("TR");
-                    let tenNhom = document.getElementById("tenNhom").value;
-                    if (tenNhom == "CHINHANH") {
-                        row.innerHTML = `
-                        <td>${customer.cmnd}</td>
-                        <td>${customer.ho}</td>
-                        <td>${customer.ten}</td>
-                        <td>${customer.diaChi}</td>
-                        <td>${customer.phai}</td>
-                        <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()}</td>
-                        <td>${customer.soDT}</td>
-                        <td>
-                        <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>
-                        </td>`;
-                        hasTbody[0].appendChild(row);
-                    }
-                    else{
-                        row.innerHTML = `
-                        <td>${customer.cmnd}</td>
-                        <td>${customer.ho}</td>
-                        <td>${customer.ten}</td>
-                        <td>${customer.diaChi}</td>
-                        <td>${customer.phai}</td>
-                        <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()}</td>
-                        <td>${customer.soDT}</td>
-                        <td>
-                        <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>
-                        </td>`;
-                        hasTbody[0].appendChild(row);
-                        fetch("http://localhost:8080/web_forbank/api-subscriber", {credentials: 'include'})
+                let tenNhom = document.getElementById("tenNhom").value;
+                if (tenNhom == "NGANHANG") {
+                    fetch("http://localhost:8080/web_forbank/api-subscriber", {credentials: 'include'})
                             .then(function (response) {
                                 return response.json();
                             })
@@ -342,7 +302,44 @@ export default class extends AbstractView {
                                 opt.value = "getAll";
                                 x.add(opt);
                             });
+                }
+                else{
+                    console.log(customers);
+                    let x = document.getElementById("table");
+                    let hasTbody = document.getElementsByTagName("tbody");
+                    if (hasTbody.length==0){
+                        let body = document.createElement("tbody");
+                        x.appendChild(body);
+                    }else{
+                        hasTbody[0].innerHTML='';
                     }
+                    for (let customer of customers) {
+                        let birthday = new Date(customer.ngayCap);
+                        let row = document.createElement("TR");
+                        row.innerHTML = `
+                            <td>${customer.cmnd}</td>
+                            <td>${customer.ho}</td>
+                            <td>${customer.ten}</td>
+                            <td>${customer.diaChi}</td>
+                            <td>${customer.phai}</td>
+                            <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()}</td>
+                            <td>${customer.soDT}</td>
+                            <td>
+                            <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>
+                            </td>`;
+                        hasTbody[0].appendChild(row);
+                    }
+                    setTimeout(function () {
+                        $('#table').DataTable({
+                            dom: 'Bfrtip',
+                            buttons: [
+                                'copyHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                                'pdfHtml5'
+                            ]
+                        });
+                    }, 300);
                 }
             })
             .catch(err => {
@@ -355,47 +352,48 @@ export default class extends AbstractView {
         let tenNhom = document.getElementById("tenNhom").value;
         if (tenNhom == "NGANHANG") {
             return `
-        <form id="formSignUp" name="formSignUp">
-            <select name="subscribers" id="subscribers">
-                <option value="getAll">Tất cả</option>
-            </select>
-            <button id="signUpBtn" class="btn btn-primary">Liệt kê</button>
-        </form>
-        <table id="table" class="table table-primary">
-            <thead>
-            <tr>
-                <th>CMND</th>
-                <th>Họ</th>
-                <th>Tên</th>
-                <th>Địa chỉ</th>
-                <th>Phái</th>
-                <th>Ngày Cấp</th>
-                <th>Số Điện Thoại</th>
-                <th></th>
-            </tr>
-            </thead>
-        </table>
-        `;
+            <form id="formSignUp" name="formSignUp">
+                <select name="subscribers" id="subscribers">
+                    <option value="getAll">Tất cả</option>
+                </select>
+                <button id="signUpBtn" class="btn btn-primary">Liệt kê</button>
+            </form>
+            <table id="table" class="table table-primary">
+                <thead>
+                <tr>
+                    <th>CMND</th>
+                    <th>Họ</th>
+                    <th>Tên</th>
+                    <th>Địa chỉ</th>
+                    <th>Phái</th>
+                    <th>Ngày Cấp</th>
+                    <th>Số Điện Thoại</th>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+            `;
         }
         else {
             return `
-        <button id="addBtn" class="btn btn-primary">Thêm Khách Hàng</button>
-        <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
-        <h2 id="errorMsg"></h2>
-        <table id="table" class="table table-primary">
-            <thead>
-            <tr>
-                <th>CMND</th>
-                <th>Họ</th>
-                <th>Tên</th>
-                <th>Địa chỉ</th>
-                <th>Phái</th>
-                <th>Ngày Cấp</th>
-                <th>Số Điện Thoại</th>
-            </tr>
-            </thead>
-        </table>
-        `;
+            <button id="addBtn" class="btn btn-primary">Thêm Khách Hàng</button>
+            <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
+            <h2 id="errorMsg"></h2>
+            <table id="table" class="table table-primary">
+                <thead>
+                <tr>
+                    <th>CMND</th>
+                    <th>Họ</th>
+                    <th>Tên</th>
+                    <th>Địa chỉ</th>
+                    <th>Phái</th>
+                    <th>Ngày Cấp</th>
+                    <th>Số Điện Thoại</th>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+            `;
         }
     }
 }

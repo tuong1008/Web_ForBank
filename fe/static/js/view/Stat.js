@@ -6,7 +6,7 @@ export default class extends AbstractView {
         this.setTitle("Sao kê");
     }
 
-    setEventBtn(){
+    setEventBtn(callback){
         //form validation
         $("#formSignUp").validate({
             onkeyup: function(element) {
@@ -47,6 +47,8 @@ export default class extends AbstractView {
             })
             .then(function (trans) {
                 console.log(trans);
+
+                callback() //to reload
                 let x = document.getElementById("table");
                 let hasTbody = document.getElementsByTagName("tbody");
                 if (hasTbody.length == 0) {
@@ -68,18 +70,23 @@ export default class extends AbstractView {
                         `
                     hasTbody[0].appendChild(row);
                 }
-
+                setTimeout(function () {
+                    $('#table').DataTable({
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'copyHtml5',
+                            'excelHtml5',
+                            'csvHtml5',
+                            'pdfHtml5'
+                        ]
+                    });
+                }, 300);
             })
             .catch(err => {
                 console.log(err);
             });
         });
     }
-
-    // load() {
-    //     let tuNgay = document.getElementById("tuNgay").value;
-    //     let denNgay = document.getElementById("denNgay").value;
-    // };
 
     getHtml() {
         return `

@@ -47,7 +47,7 @@ public class AccountDAO extends AbstractDAO<TaiKhoan> implements IAccountDAO {
 
     @Override
     public List<TaiKhoan> thongKeTK(HttpServletRequest req,String maCN, Timestamp tuNgay, Timestamp denNgay) {
-        return query(req, "select * from TaiKhoan where maCN=? and ngayMoTK > ? and ngayMoTK < ?", new AccountMapper(), tuNgay, denNgay);
+        return query(req, "select * from TaiKhoan where maCN=? and ngayMoTK > ? and ngayMoTK < ?", new AccountMapper(),maCN, tuNgay, denNgay);
     }
 
     @Override

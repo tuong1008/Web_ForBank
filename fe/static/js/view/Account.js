@@ -7,7 +7,7 @@ export default class extends AbstractView {
     }
 
     //event cho NGANHANG
-    setEventBtn(){
+    setEventBtn(callback){
         document.getElementById("submitBtn").addEventListener("click", function(event) {
             event.preventDefault();
             let myForm = document.getElementById('myForm');
@@ -23,27 +23,40 @@ export default class extends AbstractView {
                 })
                 .then(accounts => {
                     console.log(accounts);
-                let x = document.getElementById("table");
-                let hasTbody = document.getElementsByTagName("tbody");
-                if (hasTbody.length==0){
-                    let body = document.createElement("tbody");
-                    x.appendChild(body);
-                }else{
-                    hasTbody[0].innerHTML='';
-                }
-                for (let account of accounts) {
-                    let birthday = new Date(account.ngayMoTK);
-                    let row = document.createElement("TR");
-                    row.innerHTML = `
-                        <td>${account.soTK}</td>
-                        <td>${account.cmnd}</td>
-                        <td>${account.soDu}</td>
-                        <td>${account.maCN}</td>
-                        <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
-                        <td><a class="text-success" href="stat/${account.soTK}" data-link>Sao kê</a></td>
-                        `
-                        hasTbody[0].appendChild(row);
-                }
+                
+                    callback(); //to reload
+                    let x = document.getElementById("table");
+                    let hasTbody = document.getElementsByTagName("tbody");
+                    if (hasTbody.length==0){
+                        let body = document.createElement("tbody");
+                        x.appendChild(body);
+                    }else{
+                        hasTbody[0].innerHTML='';
+                    }
+                    for (let account of accounts) {
+                        let birthday = new Date(account.ngayMoTK);
+                        let row = document.createElement("TR");
+                        row.innerHTML = `
+                            <td>${account.soTK}</td>
+                            <td>${account.cmnd}</td>
+                            <td>${account.soDu}</td>
+                            <td>${account.maCN}</td>
+                            <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
+                            <td><a class="text-success" href="stat/${account.soTK}" data-link>Sao kê</a></td>
+                            `
+                            hasTbody[0].appendChild(row);
+                    }
+                    setTimeout(function () {
+                        $('#table').DataTable({
+                            dom: 'Bfrtip',
+                            buttons: [
+                                'copyHtml5',
+                                'excelHtml5',
+                                'csvHtml5',
+                                'pdfHtml5'
+                            ]
+                        });
+                    }, 300);
                 })
                 .catch(err => {
                     document.getElementById("errorMsg").innerHTML =  err;
@@ -113,22 +126,21 @@ export default class extends AbstractView {
                 return response.json();
             })
             .then(function (accounts) {
-                console.log(accounts);
-                let x = document.getElementById("table");
-                let hasTbody = document.getElementsByTagName("tbody");
-                if (hasTbody.length==0){
-                    let body = document.createElement("tbody");
-                    x.appendChild(body);
-                }else{
-                    hasTbody[0].innerHTML='';
-                }
-                for (let account of accounts) {
-                    let birthday = new Date(account.ngayMoTK);
-                    let row = document.createElement("TR");
-
                     let tenNhom = document.getElementById("tenNhom").value;
                     if (tenNhom=="CHINHANH"){
-                        row.innerHTML = `
+                        console.log(accounts);
+                        let x = document.getElementById("table");
+                        let hasTbody = document.getElementsByTagName("tbody");
+                        if (hasTbody.length == 0) {
+                            let body = document.createElement("tbody");
+                            x.appendChild(body);
+                        } else {
+                            hasTbody[0].innerHTML = '';
+                        }
+                        for (let account of accounts) {
+                            let birthday = new Date(account.ngayMoTK);
+                            let row = document.createElement("TR");
+                            row.innerHTML = `
                         <td>${account.soTK}</td>
                         <td>${account.cmnd}</td>
                         <td>${account.soDu}</td>
@@ -136,18 +148,21 @@ export default class extends AbstractView {
                         <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
                         <td><a href="/accountDelete/${account.soTK}" data-link>D</a></td>
                         `
-                        hasTbody[0].appendChild(row);
+                            hasTbody[0].appendChild(row);
+                        }
+                        setTimeout(function () {
+                            $('#table').DataTable({
+                                dom: 'Bfrtip',
+                                buttons: [
+                                    'copyHtml5',
+                                    'excelHtml5',
+                                    'csvHtml5',
+                                    'pdfHtml5'
+                                ]
+                            });
+                        }, 300);
                     }
                     else{
-                        row.innerHTML = `
-                        <td>${account.soTK}</td>
-                        <td>${account.cmnd}</td>
-                        <td>${account.soDu}</td>
-                        <td>${account.maCN}</td>
-                        <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
-                        <td><a class="text-success" href="stat/${account.soTK}" data-link>Sao kê</a></td>
-                        `
-                        hasTbody[0].appendChild(row);
                         fetch("http://localhost:8080/web_forbank/api-subscriber", {credentials: 'include'})
                             .then(function (response) {
                                 return response.json();
@@ -168,7 +183,6 @@ export default class extends AbstractView {
                             });
                     }
 
-                }
             })
             .catch(err => {
                 console.log(err);
@@ -180,6 +194,7 @@ export default class extends AbstractView {
     let tenNhom = document.getElementById("tenNhom").value;
     if (tenNhom=="NGANHANG"){
         return `
+        <h2 id="errorMsg"></h2>
         <form id="myForm" name="myForm">
             <select name="subscribers" id="subscribers">
                 <option value="getAll">Tất cả</option>
