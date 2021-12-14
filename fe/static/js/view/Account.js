@@ -70,6 +70,8 @@ export default class extends AbstractView {
             .then(function (accounts) {
                 console.log(accounts);
                 let x = document.getElementById("table");
+                let body = document.createElement("tbody");
+                x.appendChild(body);
                 for (let account of accounts) {
                     let birthday = new Date(account.ngayMoTK);
                     let row = document.createElement("TR");
@@ -79,10 +81,12 @@ export default class extends AbstractView {
                     <td>${account.soDu}</td>
                     <td>${account.maCN}</td>
                     <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
-                    <td><a href="/accountDelete/${account.soTK}" data-link>D</a></td>
-                    <td><a class="text-success" href="stat/${account.soTK}">Thống kê</a></td>
+                    <td><div>
+                    <a class="link-primary" href="/accountDelete/${account.soTK}" data-link>D</a>
+                    <a class="text-success" href="stat/${account.soTK}">Thống kê</a>
+                    </div></td>
                     `
-                    x.appendChild(row);
+                    body.appendChild(row);
                 }
             })
             .catch(err => {
@@ -103,6 +107,7 @@ export default class extends AbstractView {
         <th>Số Dư</th>
         <th>Mã Chi Nhánh</th>
         <th>Ngày Mở TK</th>
+        <th></th>
     </tr>
 </thead>
 </table>

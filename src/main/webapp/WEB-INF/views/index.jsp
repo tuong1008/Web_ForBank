@@ -1,11 +1,10 @@
-<%-- 
+<%--
     Document   : index.jsp
     Created on : Nov 20, 2021, 1:32:01 PM
     Author     : Tuong
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
     <head>

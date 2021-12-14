@@ -197,7 +197,9 @@ export default class extends AbstractView {
             })
             .then(function (employees) {
                 console.log(employees);
-                let x = document.getElementById("tblEmployee");
+                let x = document.getElementById("table");
+                let body = document.createElement("tbody");
+                x.appendChild(body);
                 for (let employee of employees) {
                     let row = document.createElement("TR");
                     row.innerHTML = `
@@ -214,7 +216,7 @@ export default class extends AbstractView {
                     <a href="/employeeTransfer/${employee.maNV}" data-link>T</a>
                     </td>
                     `;
-                    x.appendChild(row);
+                    body.appendChild(row);
                 }
             })
             .catch(err => {
@@ -228,7 +230,7 @@ export default class extends AbstractView {
         <button id="addBtn" class="btn btn-primary">Thêm Nhân Viên</button>
         <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
         <h2 id="errorMsg"></h2>
-        <table id="tblEmployee" class="table-primary">
+        <table id="table" class="table table-primary">
         <thead class="table table-bordered">
         <tr>
             <th>Mã Nhân Viên</th>

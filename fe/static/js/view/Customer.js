@@ -6,7 +6,7 @@ export default class extends AbstractView {
         this.setTitle("Khách hàng");
     }
 
-    setDeleteEvent(callback){
+    setDeleteEvent(callback) {
         if (confirm("Are you sure DELETE!")) {
             let cmnd = this.params.id;
             let object = {'cmnd': cmnd};
@@ -22,11 +22,10 @@ export default class extends AbstractView {
                 })
                 .then(result => {
                     console.log(result);
-                    if ((result.message).includes("thành công")){
+                    if ((result.message).includes("thành công")) {
                         callback();
-                    }
-                    else{
-                        document.getElementById("errorMsg").innerHTML =  result.message;
+                    } else {
+                        document.getElementById("errorMsg").innerHTML = result.message;
                     }
                 })
                 .catch(err => {
@@ -35,10 +34,10 @@ export default class extends AbstractView {
         }
     }
 
-    setEventBtn(callback){
-        document.getElementById("addBtn").addEventListener("click", function(event) {
+    setEventBtn(callback) {
+        document.getElementById("addBtn").addEventListener("click", function (event) {
             event.preventDefault();
-            document.querySelector("#app").innerHTML =`
+            document.querySelector("#app").innerHTML = `
             <h2 id="errorMsg"></h2>
             <form id="formSignUp" name="formSignUp">
                 <div class="form-group">
@@ -80,7 +79,7 @@ export default class extends AbstractView {
             </form>`;
             //form validation
             $("#formSignUp").validate({
-                onkeyup: function(element) {
+                onkeyup: function (element) {
                     $(element).valid();
                 },
                 rules: {
@@ -147,7 +146,7 @@ export default class extends AbstractView {
                 }
             });
             //end form validation
-            document.getElementById("signUpBtn").addEventListener("click", function(event){
+            document.getElementById("signUpBtn").addEventListener("click", function (event) {
                 if (!$("#formSignUp").valid()) return;
                 let formSignUp = document.getElementById('formSignUp');
                 let formData = new FormData(formSignUp);
@@ -155,11 +154,11 @@ export default class extends AbstractView {
                 //formData.append("ngayCap", document.getElementById("ngayCap").value);
                 formData.append("phai", document.getElementById("phai").value);
                 var object = {};
-                formData.forEach(function(value, key){
+                formData.forEach(function (value, key) {
                     object[key] = value;
                 });
-                let birthday = new Date(object["ngayCap"]) ;
-                object["ngayCap"] = `${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()}`;
+                let birthday = new Date(object["ngayCap"]);
+                object["ngayCap"] = `${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()}`;
                 console.log(object);
                 let url = "http://localhost:8080/web_forbank/api-customer";
                 fetch(url, {
@@ -173,12 +172,11 @@ export default class extends AbstractView {
                     })
                     .then(result => {
                         console.log(result);
-                        if ((result.message).includes("thành công")){
+                        if ((result.message).includes("thành công")) {
                             callback();
-                            document.getElementById("undoBtn").disabled =  false;
-                        }
-                        else{
-                            document.getElementById("errorMsg").innerHTML =  result.message;
+                            document.getElementById("undoBtn").disabled = false;
+                        } else {
+                            document.getElementById("errorMsg").innerHTML = result.message;
                         }
                     })
                     .catch(err => {
@@ -189,31 +187,29 @@ export default class extends AbstractView {
         });
     }
 
-    setUndoEvent(callback){
-        document.getElementById("undoBtn").addEventListener("click", function(event) {
+    setUndoEvent(callback) {
+        document.getElementById("undoBtn").addEventListener("click", function (event) {
             event.preventDefault();
             let url = "http://localhost:8080/web_forbank/api-undo";
-        fetch(url, {credentials: 'include'})
-            .then(function (response) {
-                return response.json();
-            })
-            .then(result => {
-                console.log(result);
-                if ((result.message).includes("Hết")){
-                    callback();
-                    document.getElementById("undoBtn").disabled =  true;
-                }
-                else if ((result.message).includes("thành công")){
-                    callback();
-                    document.getElementById("undoBtn").disabled =  false;
-                }
-                else{
-                    document.getElementById("errorMsg").innerHTML =  result.message;
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            });
+            fetch(url, {credentials: 'include'})
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(result => {
+                    console.log(result);
+                    if ((result.message).includes("Hết")) {
+                        callback();
+                        document.getElementById("undoBtn").disabled = true;
+                    } else if ((result.message).includes("thành công")) {
+                        callback();
+                        document.getElementById("undoBtn").disabled = false;
+                    } else {
+                        document.getElementById("errorMsg").innerHTML = result.message;
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         });
     }
 
@@ -225,9 +221,11 @@ export default class extends AbstractView {
             })
             .then(function (customers) {
                 console.log(customers);
-                let x = document.getElementById("tblCustomer");
+                let x = document.getElementById("table");
+                let body = document.createElement("tbody");
+                x.appendChild(body);
                 for (let customer of customers) {
-                    let birthday = new Date(customer.ngayCap) ;
+                    let birthday = new Date(customer.ngayCap);
                     let row = document.createElement("TR");
                     row.innerHTML = `
                     <td>${customer.cmnd}</td>
@@ -235,11 +233,12 @@ export default class extends AbstractView {
                     <td>${customer.ten}</td>
                     <td>${customer.diaChi}</td>
                     <td>${customer.phai}</td>
-                    <td>${birthday.getDate()}-${birthday.getMonth()+1}-${birthday.getFullYear()}</td>
+                    <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()}</td>
                     <td>${customer.soDT}</td>
                     <td>
-                    <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>`;
-                    x.appendChild(row);
+                    <a href="/customerUpdate/${customer.cmnd}" data-link>U</a>
+                    </td>`;
+                    body.appendChild(row);
                 }
             })
             .catch(err => {
@@ -253,7 +252,7 @@ export default class extends AbstractView {
 <button id="addBtn" class="btn btn-primary">Thêm Khách Hàng</button>
 <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
 <h2 id="errorMsg"></h2>
-<table id="tblCustomer" class="table table-primary">
+<table id="table" class="table table-primary">
     <thead>
     <tr>
         <th>CMND</th>
@@ -263,6 +262,7 @@ export default class extends AbstractView {
         <th>Phái</th>
         <th>Ngày Cấp</th>
         <th>Số Điện Thoại</th>
+        <th></th>
     </tr>
     </thead>
 </table>

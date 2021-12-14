@@ -5,15 +5,15 @@
  */
 package mapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import model.TaiKhoan;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
- *
  * @author Tuong
  */
-public class AccountMapper implements RowMapper<TaiKhoan>{
+public class AccountMapper implements RowMapper<TaiKhoan> {
 
     @Override
     public TaiKhoan mapRow(ResultSet rs) {
@@ -28,7 +28,5 @@ public class AccountMapper implements RowMapper<TaiKhoan>{
         } catch (SQLException e) {
             return null;
         }
-    
     }
-    
 }
