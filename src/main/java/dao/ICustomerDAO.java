@@ -22,4 +22,5 @@ public interface ICustomerDAO extends GenericDAO<KhachHang>{
                     String phai, Timestamp ngayCap, String soDT, String maCN, BigDecimal soDu);
     String updateCustomer(HttpServletRequest req, String CMND, String ho, String ten, String diaChi, 
                     String phai, Timestamp ngayCap, String soDT);
+    List<KhachHang> thongKeKH(HttpServletRequest req);
 }

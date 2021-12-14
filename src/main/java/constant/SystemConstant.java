@@ -15,6 +15,7 @@ import model.PhanManh;
  */
 public class SystemConstant {
     public static SimpleDateFormat ddMMyyyy = new SimpleDateFormat("dd-MM-yyyy");
+    public static SimpleDateFormat yyyyMMdd = new SimpleDateFormat("yyyy-MM-dd");
     public static String defaultPassword = "123";
     public static String HTKN = "HTKN";
     public static String server3 = "TUONG-PC\\SERVER3";

@@ -45,6 +45,16 @@ export default class extends AbstractView {
                 })
                 .then(success => {
                     console.log(success);
+                    // lưu thông tin user
+                    document.getElementById("serverName").value = success.serverName;
+                    document.getElementById("user").value = success.user;
+                    document.getElementById("password").value = success.password;
+                    document.getElementById("userName").value = success.userName;
+                    document.getElementById("hoTen").value = success.hoTen;
+                    document.getElementById("maCN").value = success.maCN;
+                    document.getElementById("tenNhom").value = success.tenNhom;
+
+
                     document.getElementById("nav_item_login").hidden=true;
                     document.getElementById("nav_item_logout").hidden=false;
                     
@@ -64,19 +74,30 @@ export default class extends AbstractView {
         });
     }
 
-    editViewAfterLogout(){
-        document.getElementById("nav_item_login").hidden=false;
-        document.getElementById("nav_item_logout").hidden=true;
-        document.getElementById("nav_item_update").hidden=true;
-        document.getElementById("nav_item_change_pass").hidden=true;
+    logoutEvent(){
+        let url = "http://localhost:8080/web_forbank/api-logout";
+        fetch(url, {credentials: 'include'})
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (result) {
+                if ((result.message).includes("thành công")){
+                    document.getElementById("nav_item_login").hidden=false;
+                    document.getElementById("nav_item_logout").hidden=true;
+                    document.getElementById("nav_item_update").hidden=true;
+                    document.getElementById("nav_item_change_pass").hidden=true;
+                }
+                else{
+                    document.getElementById("errorMsg").innerHTML =  result.message;
+                }
+            });
     }
 
     getHtml() {
         return `
         <h2 id="errorMsg"></h2>
     <form id="formLogin" name="formLogin">
-        <select name="subscribers" id="subscribers">
-        </select>
+        <select name="subscribers" id="subscribers"></select>
         <div class="form-group">
             <input type="text" class="form-control" id="userName" name="userName"
                 placeholder="Tên đăng nhập">

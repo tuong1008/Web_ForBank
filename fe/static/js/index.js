@@ -66,7 +66,7 @@ const router = async () => {
             navigateTo("/deposit-withdraw");
         });
         if (match.route.path == "/logout") {
-            view.editViewAfterLogout();
+            view.logoutEvent();
         }
     }
     if (view instanceof ChangePass) {
@@ -120,12 +120,18 @@ const router = async () => {
         view.load(function () {
             navigateTo("/login");
         });
-        view.setEventBtn(function () {
-            navigateTo("/customer");
-        });
-        view.setUndoEvent(function () {
-            navigateTo("/customer");
-        });
+        let tenNhom=document.getElementById("tenNhom");
+        if (tenNhom=="CHINHANH"){
+            view.setEventBtn(function () {
+                navigateTo("/customer");
+            });
+            view.setUndoEvent(function () {
+                navigateTo("/customer");
+            });
+        }
+        else{
+            view.setLietKeEvent();
+        }
 
         $(document).ready(function () {
             $('#tblCustomer').DataTable({
@@ -194,9 +200,15 @@ const router = async () => {
             view.load(function () {
                 navigateTo("/login");
             });
-            view.setUndoEvent(function () {
-                navigateTo("/account");
-            });
+            let tenNhom = document.getElementById("tenNhom").value;
+            if (tenNhom=="CHINHANH"){
+                view.setUndoEvent(function () {
+                    navigateTo("/account");
+                });
+            }
+            else{
+                view.setEventBtn();
+            }
             $(document).ready(function () {
                 $('#table').DataTable({
                     dom: 'Bfrtip',
@@ -209,6 +221,10 @@ const router = async () => {
                 });
             });
         }
+    }
+    else if (view instanceof Stat) {
+        document.querySelector("#app").innerHTML = view.getHtml();
+        view.setEventBtn();
     }
 };
 

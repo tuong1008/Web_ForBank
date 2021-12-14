@@ -42,5 +42,10 @@ public class CustomerService implements ICustomerService{
     public KhachHang getOne(HttpServletRequest req, String cmnd) {
         return customerDAO.getOne(req, cmnd);
     }
+
+    @Override
+    public List<KhachHang> thongKeKH(HttpServletRequest req) {
+        return customerDAO.thongKeKH(req);
+    }
     
 }

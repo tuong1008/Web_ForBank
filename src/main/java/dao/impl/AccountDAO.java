@@ -6,12 +6,13 @@
 package dao.impl;
 
 import dao.IAccountDAO;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import mapper.AccountMapper;
+import mapper.ThongKeGDMapper;
 import model.TaiKhoan;
+import model.ThongKeGD;
 
 /**
  *
@@ -38,5 +39,22 @@ public class AccountDAO extends AbstractDAO<TaiKhoan> implements IAccountDAO {
     public TaiKhoan getOne(HttpServletRequest req, String soTK) {
         return query(req, "select * from TaiKhoan where SOTK = ?", new AccountMapper(), soTK).get(0);
     }
+
+    @Override
+    public List<ThongKeGD> thongKeGD(HttpServletRequest req, String soTK, Timestamp tuNgay, Timestamp denNgay) {
+        return query(req, "select * from dbo.THONGKE_GD(?) where ngaygd > ? and ngaygd < ?", new ThongKeGDMapper(), soTK, tuNgay, denNgay);
+    }
+
+    @Override
+    public List<TaiKhoan> thongKeTK(HttpServletRequest req,String maCN, Timestamp tuNgay, Timestamp denNgay) {
+        return query(req, "select * from TaiKhoan where maCN=? and ngayMoTK > ? and ngayMoTK < ?", new AccountMapper(), tuNgay, denNgay);
+    }
+
+    @Override
+    public List<TaiKhoan> thongKeTKAllServer(HttpServletRequest req, Timestamp tuNgay, Timestamp denNgay) {
+        return query(req, "select * from TaiKhoan where ngayMoTK > ? and ngayMoTK < ?", new AccountMapper(), tuNgay, denNgay);
+    }
+
+    
     
 }

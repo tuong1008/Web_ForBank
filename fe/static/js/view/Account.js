@@ -6,6 +6,46 @@ export default class extends AbstractView {
         this.setTitle("Tài khoản");
     }
 
+    //event cho NGANHANG
+    setEventBtn(){
+        document.getElementById("submitBtn").addEventListener("click", function(event) {
+            event.preventDefault();
+            let myForm = document.getElementById('myForm');
+            let formData = new FormData(myForm);
+            formData.append("maCN", document.getElementById("subscribers").value);
+            console.log(formData.get("tuNgay"));
+            console.log(formData.get("denNgay"));
+            console.log(formData.get("maCN"));
+            let url = `http://localhost:8080/web_forbank/api-bank-created-account?maCN=${formData.get("maCN")}&tuNgay=${formData.get("tuNgay")}&denNgay=${formData.get("denNgay")}`;
+            fetch(url, {credentials: 'include'})
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(accounts => {
+                    console.log(accounts);
+                let x = document.getElementById("table");
+                let body = document.createElement("tbody");
+                x.appendChild(body);
+                for (let account of accounts) {
+                    let birthday = new Date(account.ngayMoTK);
+                    let row = document.createElement("TR");
+                    row.innerHTML = `
+                        <td>${account.soTK}</td>
+                        <td>${account.cmnd}</td>
+                        <td>${account.soDu}</td>
+                        <td>${account.maCN}</td>
+                        <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
+                        <td><a class="text-success" href="stat/${account.soTK}" data-link>Sao kê</a></td>
+                        `
+                    body.appendChild(row);
+                }
+                })
+                .catch(err => {
+                    document.getElementById("errorMsg").innerHTML =  err;
+                });
+        });
+    }
+
     setDeleteEvent(callback) {
         if (confirm("Are you sure DELETE!")) {
             let soTK = this.params.id;
@@ -70,19 +110,49 @@ export default class extends AbstractView {
             .then(function (accounts) {
                 console.log(accounts);
                 let x = document.getElementById("table");
+                let body = document.createElement("tbody");
+                x.appendChild(body);
                 for (let account of accounts) {
                     let birthday = new Date(account.ngayMoTK);
                     let row = document.createElement("TR");
-                    row.innerHTML = `
-                    <td>${account.soTK}</td>
-                    <td>${account.cmnd}</td>
-                    <td>${account.soDu}</td>
-                    <td>${account.maCN}</td>
-                    <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
-                    <td><a href="/accountDelete/${account.soTK}" data-link>D</a></td>
-                    <td><a class="text-success" href="stat/${account.soTK}">Thống kê</a></td>
-                    `
-                    x.appendChild(row);
+                    
+                    let tenNhom = document.getElementById("tenNhom").value;
+                    if (tenNhom=="CHINHANH"){
+                        row.innerHTML = `
+                        <td>${account.soTK}</td>
+                        <td>${account.cmnd}</td>
+                        <td>${account.soDu}</td>
+                        <td>${account.maCN}</td>
+                        <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
+                        <td><a href="/accountDelete/${account.soTK}" data-link>D</a></td>
+                        `
+                        body.appendChild(row);
+                    }
+                    else{
+                        row.innerHTML = `
+                        <td>${account.soTK}</td>
+                        <td>${account.cmnd}</td>
+                        <td>${account.soDu}</td>
+                        <td>${account.maCN}</td>
+                        <td>${birthday.getDate()}-${birthday.getMonth() + 1}-${birthday.getFullYear()} ${birthday.getHours()}:${birthday.getMinutes()}</td>
+                        <td><a class="text-success" href="stat/${account.soTK}" data-link>Sao kê</a></td>
+                        `
+                        x.appendChild(row);
+                        fetch("http://localhost:8080/web_forbank/api-subscriber", {credentials: 'include'})
+                            .then(function (response) {
+                                return response.json();
+                            })
+                            .then(function (subscribers) {
+                                let x = document.getElementById("subscribers");
+                                for (let subscriber of subscribers) {
+                                    let option = document.createElement("option");
+                                    option.text = subscriber.tenCN;
+                                    option.value = subscriber.maCN;
+                                    x.add(option);
+                                }
+                            });
+                    }
+                    
                 }
             })
             .catch(err => {
@@ -92,20 +162,50 @@ export default class extends AbstractView {
     };
 
     getHtml() {
+    let tenNhom = document.getElementById("tenNhom").value;
+    if (tenNhom=="NGANHANG"){
         return `
-<button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
-<h2 id="errorMsg"></h2>
-<table id="table" class="table table-primary">
-<thead>
-    <tr>
-        <th>Số Tài Khoản</th>
-        <th>CMND</th>
-        <th>Số Dư</th>
-        <th>Mã Chi Nhánh</th>
-        <th>Ngày Mở TK</th>
-    </tr>
-</thead>
-</table>
-`;
+        <form id="myForm" name="myForm">
+            <select name="subscribers" id="subscribers">
+                <option value="getAll">Tất cả</option>
+            </select>
+            <div class="form-group">
+                <input type="date" class="form-control" id="tuNgay" name="tuNgay" placeholder="Từ ngày">
+                </div>
+            <div class="form-group">
+                <input type="date" class="form-control" id="denNgay" name="denNgay" placeholder="Đến ngày">
+            </div>
+            <button id="submitBtn" class="btn btn-primary">Liệt kê</button>
+        </form>
+        <table id="table" class="table table-primary">
+        <thead>
+            <tr>
+                <th>Số Tài Khoản</th>
+                <th>CMND</th>
+                <th>Số Dư</th>
+                <th>Mã Chi Nhánh</th>
+                <th>Ngày Mở TK</th>
+            </tr>
+        </thead>
+        </table>
+        `;
+    }
+    else{
+        return `
+        <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
+        <h2 id="errorMsg"></h2>
+        <table id="table" class="table table-primary">
+        <thead>
+            <tr>
+                <th>Số Tài Khoản</th>
+                <th>CMND</th>
+                <th>Số Dư</th>
+                <th>Mã Chi Nhánh</th>
+                <th>Ngày Mở TK</th>
+            </tr>
+        </thead>
+        </table>
+        `;
+    }
     }
 }

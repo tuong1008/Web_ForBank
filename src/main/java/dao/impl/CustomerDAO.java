@@ -40,5 +40,10 @@ public class CustomerDAO extends AbstractDAO<KhachHang> implements ICustomerDAO{
     public KhachHang getOne(HttpServletRequest req, String cmnd) {
         return query(req, "select * from KhachHang where CMND = ?", new CustomerMapper(), cmnd).get(0);
     }
+
+    @Override
+    public List<KhachHang> thongKeKH(HttpServletRequest req) {
+        return query(req, "select * from dbo.THONGKE_KH()", new CustomerMapper());
+    }
     
 }

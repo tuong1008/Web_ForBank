@@ -14,5 +14,5 @@ public interface GenericDAO<T>  {
     <T> List<T> query(HttpServletRequest req, String sql, RowMapper<T> rowMapper, Object... parameters);
     String crudAction (HttpServletRequest req, boolean isStoredProcedured, boolean withTransaction, String sql, Object... parameters);
     int count (String sql, Object... parameters);
-    ResultSet query(String sql, Object... parameters);
+    ResultSet query(HttpServletRequest req, String sql, Object... parameters);
 }

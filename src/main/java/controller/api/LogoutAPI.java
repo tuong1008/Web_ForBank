@@ -36,9 +36,8 @@ public class LogoutAPI extends HttpServlet{
         session.setAttribute("serverName", resourceBundle.getString("serverName"));
         session.setAttribute("user", resourceBundle.getString("user"));
         session.setAttribute("password", resourceBundle.getString("password"));
-        User userInfo=userService.loginAndChangeServer(req, session.getAttribute("serverName").toString(), session.getAttribute("user").toString(),
-                                                                session.getAttribute("password").toString());
-        session.removeAttribute("user");
+
+        session.removeAttribute("userInfo");
         
         JsonGenerator generator = Json.createGenerator(resp.getOutputStream());
         

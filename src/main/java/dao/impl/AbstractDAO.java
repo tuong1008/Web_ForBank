@@ -91,7 +91,7 @@ public class AbstractDAO<T> implements GenericDAO<T>{
 			} catch (SQLException e) {
 				return null;
 			}
-    }
+                }
     }
 
     @Override
@@ -144,7 +144,34 @@ public class AbstractDAO<T> implements GenericDAO<T>{
 
     
     @Override
-    public ResultSet query(String string, Object... os) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ResultSet query(HttpServletRequest req, String sql, Object... parameters) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		try {
+                        HttpSession session = req.getSession();
+			connection = getConnection(session.getAttribute("serverName").toString(), session.getAttribute("user").toString(),
+                                                                session.getAttribute("password").toString());
+			statement = connection.prepareStatement(sql);
+			setParameter(statement, parameters);
+			resultSet = statement.executeQuery();
+			return resultSet;
+		} catch (SQLException e) {
+			return null;
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (resultSet != null) {
+					resultSet.close();
+				}
+			} catch (SQLException e) {
+				return null;
+			}
+                }
     }
 }

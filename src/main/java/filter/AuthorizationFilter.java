@@ -31,7 +31,6 @@ public class AuthorizationFilter implements Filter{
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String url = request.getRequestURI();
-        System.out.println(url);
         if (url.contains("/api")==true && url.contains("/api-subscriber")==false 
                 && url.contains("/api-user-login")==false) {
             User model = (User) request.getSession().getAttribute("userInfo");
