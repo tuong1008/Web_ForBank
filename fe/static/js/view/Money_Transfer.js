@@ -136,7 +136,7 @@ export default class extends AbstractView {
         return `
 <button id="addBtn" class="btn btn-primary">Chuyển Tiền</button>
 <table id="table" class="table table-primary">
-    <thead>
+    <thead class="table-light">
     <tr>
         <th>Mã Giao Dịch</th>
         <th>Tài Khoản Chuyển</th>

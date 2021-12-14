@@ -58,7 +58,7 @@ public class AbstractDAO<T> implements GenericDAO<T> {
     @Override
     public <T> List<T> query(HttpServletRequest req, String sql, RowMapper<T> rowMapper, Object... parameters) {
         List<T> results = new ArrayList<>();
-<<<<<<< HEAD
+//<<<<<<<HEAD
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
@@ -89,42 +89,42 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 			} catch (SQLException e) {
 				return null;
 			}
-                }
-=======
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            HttpSession session = req.getSession();
-            connection = getConnection(
-                    session.getAttribute("serverName").toString(),
-                    session.getAttribute("user").toString(),
-                    session.getAttribute("password").toString());
-            statement = connection.prepareStatement(sql);
-            setParameter(statement, parameters);
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                results.add(rowMapper.mapRow(resultSet));
-            }
-            return results;
-        } catch (SQLException e) {
-            return null;
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-            } catch (SQLException e) {
-                return null;
-            }
-        }
->>>>>>> 8340cb25ff7beb0f52e3761254155a14dee18ed5
+		}
+//=======
+//        Connection connection = null;
+//        PreparedStatement statement = null;
+//        ResultSet resultSet = null;
+//        try {
+//            HttpSession session = req.getSession();
+//            connection = getConnection(
+//                    session.getAttribute("serverName").toString(),
+//                    session.getAttribute("user").toString(),
+//                    session.getAttribute("password").toString());
+//            statement = connection.prepareStatement(sql);
+//            setParameter(statement, parameters);
+//            resultSet = statement.executeQuery();
+//            while (resultSet.next()) {
+//                results.add(rowMapper.mapRow(resultSet));
+//            }
+//            return results;
+//        } catch (SQLException e) {
+//            return null;
+//        } finally {
+//            try {
+//                if (connection != null) {
+//                    connection.close();
+//                }
+//                if (statement != null) {
+//                    statement.close();
+//                }
+//                if (resultSet != null) {
+//                    resultSet.close();
+//                }
+//            } catch (SQLException e) {
+//                return null;
+//            }
+//        }
+//>>>>>>> 8340cb25ff7beb0f52e3761254155a14dee18ed5
     }
 
     @Override
@@ -189,19 +189,19 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 		} catch (SQLException e) {
 			return null;
 		} finally {
-			try {
-				if (connection != null) {
-					connection.close();
-				}
-				if (statement != null) {
-					statement.close();
-				}
-				if (resultSet != null) {
-					resultSet.close();
-				}
-			} catch (SQLException e) {
-				return null;
-			}
+            try {
+                if (connection != null) {
+                    connection.close();
                 }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                return null;
+            }
+        }
     }
 }

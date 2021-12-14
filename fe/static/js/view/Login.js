@@ -51,7 +51,7 @@ export default class extends AbstractView {
 
                     document.getElementById("nav_item_login").hidden=true;
                     document.getElementById("nav_item_logout").hidden=false;
-                    
+
                     let navItemUpdate = document.getElementById("nav_item_update");
                     navItemUpdate.hidden=false;
                     navItemUpdate.href = `/employeeUpdate/${success.userName}`;

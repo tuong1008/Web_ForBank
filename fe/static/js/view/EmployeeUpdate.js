@@ -110,7 +110,7 @@ export default class extends AbstractView {
         console.log(this.params.id);
         return `
         <h2 id="errorMsg"></h2>
-        <form id="formSignUp" name="formSignUp">
+        <form class="form-control" id="formSignUp" name="formSignUp">
             <div class="form-group">
                 <input type="text" class="form-control" id="maNV" name="maNV"
                     placeholder="Mã Nhân Viên">

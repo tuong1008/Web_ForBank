@@ -231,7 +231,7 @@ export default class extends AbstractView {
         <button id="undoBtn" class="btn btn-primary" disabled>Hoàn Tác</button>
         <h2 id="errorMsg"></h2>
         <table id="table" class="table table-primary">
-        <thead class="table table-bordered">
+        <thead class="table table-light">
         <tr>
             <th>Mã Nhân Viên</th>
             <th>Họ</th>

@@ -66,8 +66,8 @@ export default class extends AbstractView {
     getHtml() {
         return `
         <h2 id="errorMsg"></h2>
-    <form id="formLogin" name="formLogin">
-        <select name="subscribers" id="subscribers">
+    <form id="formLogin" name="formLogin" class="form-control">
+        <select name="subscribers" id="subscribers" class="form-select">
         </select>
         <button id="loginBtn" class="btn btn-primary">Chuyển</button>
     </form>`;
