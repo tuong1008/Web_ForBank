@@ -47,6 +47,8 @@ export default class extends AbstractView {
                     console.log(success);
                     // lưu thông tin user
                     document.getElementById("tenNhom").value = success.tenNhom;
+                    document.getElementById("myUser").innerHTML =success.user;
+                    document.getElementById("myMaCN").innerHTML =success.maCN;
 
 
                     document.getElementById("nav_item_login").hidden=true;
@@ -80,6 +82,8 @@ export default class extends AbstractView {
                     document.getElementById("nav_item_logout").hidden=true;
                     document.getElementById("nav_item_update").hidden=true;
                     document.getElementById("nav_item_change_pass").hidden=true;
+                    document.getElementById("myUser").innerHTML ='';
+                    document.getElementById("myMaCN").innerHTML ='';
                 }
                 else{
                     document.getElementById("errorMsg").innerHTML =  result.message;
